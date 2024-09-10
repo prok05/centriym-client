@@ -2,6 +2,8 @@
 
 import { useSearchParams } from 'next/navigation';
 import {useEffect, useState} from "react";
+import {OpenedChat} from "@/components/messages/OpenedChat";
+import {NoChat} from "@/components/messages/NoChat";
 
 export function ChatPanel({chats}) {
     const searchParams = useSearchParams();
@@ -20,12 +22,8 @@ export function ChatPanel({chats}) {
     }, [id]);
 
     return (
-        <div className="flex justify-center items-center h-full">
-            {selectedChat ? (
-                <h1>Открытый чат {selectedChat.id}</h1>
-            ) : (
-                <p className="text-gray-400">Выберите чат или создайте новый</p>
-            )}
+        <div className="h-full">
+            {selectedChat ? (<OpenedChat />) : (<NoChat />)}
         </div>
     )
 }
