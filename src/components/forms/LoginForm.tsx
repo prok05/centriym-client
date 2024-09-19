@@ -1,16 +1,29 @@
+'use client'
+
 import Input from "@/components/ui/Input";
 import Image from 'next/image';
 import loginIcon from '../../../public/icons/login-icon.svg'
 import passIcon from '../../../public/icons/pass-icon.svg'
 import {LoginRegisterButtons} from "@/components/forms/LoginRegisterButtons";
+import PhoneInput from "react-phone-number-input/input";
+import {useState} from "react";
 
 export default function LoginForm() {
+    const [phone, setPhone] = useState();
     return (
         <div className="my-0 mx-auto bg-purple-sec w-full max-w-sm rounded-3xl">
             <form className="rounded px-8 pt-6 pb-8 mb-4">
                 <LoginRegisterButtons />
                 <div className="mb-4 relative">
-                    <Input name="telNo" type="tel" placeholder="Номер телефона"/>
+                    <PhoneInput
+                        id="telNo"
+                        className="shadow appearance-none rounded-full w-full py-2 px-14 text-[#6B6B6B] leading-tight focus:outline-none focus:shadow-outline text-center"
+                        placeholder="Номер телефона"
+                        value={phone}
+                        onChange={setPhone}
+                        country="RU"
+                        withCountryCallingCode
+                        international/>
                     <Image className="absolute left-[16px] top-0 bottom-0 my-auto mx-0"
                         src={loginIcon}
                            alt="Logic Icon"

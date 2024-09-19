@@ -5,7 +5,7 @@ export function SelectRole() {
             <select className="w-full rounded-full p-2" name="role">
                 <option value="student" selected>Ученик</option>
                 <option value="teacher">Преподаватель</option>
-                <option value="methodist">Методист</option>
+                <option value="supervisor">Методист</option>
             </select>
         </div>
     )
