@@ -3,7 +3,7 @@
 import {SmallLogo} from "@/components/ui/SmallLogo";
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import Image from 'next/image';
+import {useRouter} from 'next/navigation';
 
 import HomeIcon from '../icons/HomeIcon'
 import LessonsIcon from '../icons/LessonsIcon'
@@ -13,6 +13,34 @@ import LogoutIcon from "@/components/icons/LogoutIcon";
 
 export function NavigationPanel() {
     const pathname = usePathname();
+    const router = useRouter();
+
+
+    async function handleLogout() {
+        try {
+            // const data = {
+            //     "phone": phone,
+            //     "password": formData.get("password")
+            // }
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/logout`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                method: "POST",
+                credentials: "include"
+            })
+
+            switch (response.status) {
+                case 400:
+                    return
+                case 200:
+                    router.push("/login")
+                    break
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <div className="flex flex-col w-1/6 flex-grow py-2 px-5 shadow-[4px_0_8px_rgba(0,0,0,0.1)] z-10">
@@ -65,7 +93,7 @@ export function NavigationPanel() {
                         <LogoutIcon
                             className="mr-3 "
                         />
-                        <Link className="text-[#F13E3E]" href="/">Выход</Link>
+                        <button className="text-[#F13E3E]" onClick={handleLogout}>Выход</button>
                     </li>
                 </ul>
             </nav>

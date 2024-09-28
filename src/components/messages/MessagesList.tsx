@@ -4,6 +4,7 @@ import MessagesItem from "@/components/messages/MessageItem";
 import { useRouter } from 'next/navigation';
 
 
+// @ts-ignore
 export default function MessagesList({chats}) {
     const router = useRouter();
 
@@ -13,7 +14,7 @@ export default function MessagesList({chats}) {
 
     return (
         <ul>
-            {chats.map((chat) => (
+            {chats.map((chat:any) => (
                 <MessagesItem id={chat.id} onClick={onClick} key={chat.sender} senderName={chat.sender} lastMessage={chat.lastMessage} date={chat.date}
                 />
             ))}

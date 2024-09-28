@@ -7,9 +7,6 @@ export function OpenedChat() {
         {user_id: 222, text: "Как дела?"},
         {user_id: 333, text: "Нормально, у тебя?"},
         {user_id: 222, text: "Да тоже"},
-        {user_id: 333, text: "Скидывай бабки"},
-        {user_id: 222, text: "Нет!"},
-        {user_id: 333, text: "Ок!"},
     ]
 
     return (

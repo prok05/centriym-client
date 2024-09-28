@@ -12,7 +12,7 @@ export function MessagesPanel() {
         },
         {
             id: 2131234,
-            sender: "Хуйман",
+            sender: "Петр",
             lastMessage: "Ку",
             date: "Сент 11, 24"
         }
