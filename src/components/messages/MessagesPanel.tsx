@@ -1,22 +1,57 @@
-import MessagesList from "@/components/messages/MessagesList";
-import {ChatPanel} from "@/components/messages/ChatPanel";
+'use client'
+
+import ChatList from "@/components/messages/ChatList";
+import {Conversation} from "@/components/messages/Conversation";
 import NewMessageIcon from "@/components/icons/NewMessageIcon";
+import {useEffect, useState} from "react";
+import ChatI from "@/lib/types";
+import {establishWebSocketConnection} from "@/ws/websocket";
 
 export function MessagesPanel() {
-    const chats = [
-        {
-            id: 1232144,
-            sender: "Николас",
-            lastMessage: "Привет",
-            date: "Сент 10, 24"
-        },
-        {
-            id: 2131234,
-            sender: "Петр",
-            lastMessage: "Ку",
-            date: "Сент 11, 24"
-        }
-    ]
+    const [chats, setChats] = useState<ChatI[]>([]);
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [selectedChatId, setSelectedChatId] = useState(null);
+    const [ws, setWs] = useState(null);
+
+    useEffect(() => {
+        // Функция для загрузки чатов
+        const fetchChats = async () => {
+            setIsLoading(true)
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/chats`); // Получаем список чатов
+            const data = await response.json();
+            setChats(data); // Сохраняем чаты в состоянии
+            setIsLoading(false)
+        };
+
+        fetchChats();
+
+        // Устанавливаем WebSocket соединение
+        const ws = establishWebSocketConnection();
+
+        // Обработка входящих сообщений
+        ws.onmessage = (event) => {
+            const newMessage = JSON.parse(event.data);
+            // Обновление чата с новым сообщением
+            setChats((prevChats) => {
+                // Логика обновления чата с новым сообщением
+                // Например, добавление нового сообщения в последний чат
+                return prevChats.map(chat => {
+                    if (chat.id === newMessage.chatID) {
+                        return {
+                            ...chat,
+                            lastMessage: newMessage,
+                        };
+                    }
+                    return chat;
+                });
+            });
+        };
+
+        return () => {
+            ws.close(); // Закрываем соединение при размонтировании компонента
+        };
+    }, []);
+
 
     return (
         <div className="flex flex-grow rounded-xl bg-white h-full border-2">
@@ -30,11 +65,11 @@ export function MessagesPanel() {
                 </div>
 
                 <div>
-                    <MessagesList chats={chats}/>
+                    <ChatList props={isLoading} />
                 </div>
             </div>
             <div className="w-2/3">
-                <ChatPanel chats={chats} />
+                <Conversation />
             </div>
         </div>
     )

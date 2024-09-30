@@ -1,4 +1,4 @@
-export default function MessagesItem(props: MessageItemProps) {
+export default function ChatItem(props: MessageItemProps) {
 
     return (
         <li className="p-3 mb-1 last:mb-0 cursor-pointer hover:bg-purple-sec transition-colors" onClick={() => props.onClick(props.id)}>

@@ -7,3 +7,10 @@ export default interface LessonI  {
     subjectName: string
     streaming: string[]
 }
+
+export default interface ChatI {
+    id: number
+    chatType: string
+    name: string
+    createdAt: string
+}
