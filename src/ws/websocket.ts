@@ -1,5 +1,5 @@
 export function establishWebSocketConnection() {
-    const ws = new WebSocket('ws://localhost:8080/ws'); // Замените на ваш адрес сервера WebSocket
+    const ws = new WebSocket('ws://localhost:8080/ws');
 
     ws.onopen = () => {
         console.log('WebSocket connection established');

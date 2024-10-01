@@ -3,7 +3,7 @@
 import ChatList from "@/components/messages/ChatList";
 import {Conversation} from "@/components/messages/Conversation";
 import NewMessageIcon from "@/components/icons/NewMessageIcon";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import ChatI from "@/lib/types";
 import {establishWebSocketConnection} from "@/ws/websocket";
 
@@ -11,45 +11,54 @@ export function MessagesPanel() {
     const [chats, setChats] = useState<ChatI[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [selectedChatId, setSelectedChatId] = useState(null);
+    const socket = useRef()
     const [ws, setWs] = useState(null);
+
+    // const esablish = () => {
+    //     establishWebSocketConnection()
+    // }
 
     useEffect(() => {
         // Функция для загрузки чатов
-        const fetchChats = async () => {
-            setIsLoading(true)
-            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/chats`); // Получаем список чатов
-            const data = await response.json();
-            setChats(data); // Сохраняем чаты в состоянии
-            setIsLoading(false)
-        };
-
-        fetchChats();
+        // const fetchChats = async () => {
+        //     setIsLoading(true)
+        //     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/chats`); // Получаем список чатов
+        //     const data = await response.json();
+        //     setChats(data); // Сохраняем чаты в состоянии
+        //     setIsLoading(false)
+        // };
+        //
+        // fetchChats();
 
         // Устанавливаем WebSocket соединение
-        const ws = establishWebSocketConnection();
+        // const ws = establishWebSocketConnection();
 
+        socket.current = new WebSocket('ws://localhost:8080/ws')
+        socket.current.onopen = () => {
+            console.log("Connected")
+        }
         // Обработка входящих сообщений
-        ws.onmessage = (event) => {
-            const newMessage = JSON.parse(event.data);
-            // Обновление чата с новым сообщением
-            setChats((prevChats) => {
-                // Логика обновления чата с новым сообщением
-                // Например, добавление нового сообщения в последний чат
-                return prevChats.map(chat => {
-                    if (chat.id === newMessage.chatID) {
-                        return {
-                            ...chat,
-                            lastMessage: newMessage,
-                        };
-                    }
-                    return chat;
-                });
-            });
-        };
+        // ws.onmessage = (event) => {
+        //     const newMessage = JSON.parse(event.data);
+        //     // Обновление чата с новым сообщением
+        //     setChats((prevChats) => {
+        //         // Логика обновления чата с новым сообщением
+        //         // Например, добавление нового сообщения в последний чат
+        //         return prevChats.map(chat => {
+        //             if (chat.id === newMessage.chatID) {
+        //                 return {
+        //                     ...chat,
+        //                     lastMessage: newMessage,
+        //                 };
+        //             }
+        //             return chat;
+        //         });
+        //     });
+        // };
 
-        return () => {
-            ws.close(); // Закрываем соединение при размонтировании компонента
-        };
+        // return () => {
+        //     ws.close(); // Закрываем соединение при размонтировании компонента
+        // };
     }, []);
 
 
@@ -70,6 +79,7 @@ export function MessagesPanel() {
             </div>
             <div className="w-2/3">
                 <Conversation />
+                <button onClick={esablish}>Establish</button>
             </div>
         </div>
     )
