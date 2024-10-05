@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import LessonI from "@/lib/types";
+import {LessonI} from "@/lib/types";
 
 interface LessonStore {
     lessons: LessonI[] | null;

@@ -4,31 +4,40 @@ import ChatList from "@/components/messages/ChatList";
 import {Conversation} from "@/components/messages/Conversation";
 import NewMessageIcon from "@/components/icons/NewMessageIcon";
 import {useEffect, useRef, useState} from "react";
-import ChatI from "@/lib/types";
 import {establishWebSocketConnection} from "@/ws/websocket";
+import {FetchChatI} from "@/lib/types";
+import ChatListLoadingItem from "@/components/messages/ChatListLoadingItem";
+import ChatListLoading from "@/components/messages/ChatListLoading";
+import NewChat from "@/components/messages/NewChat";
 
 export function MessagesPanel() {
-    const [chats, setChats] = useState<ChatI[]>([]);
+    const [chats, setChats] = useState<FetchChatI>({count: 0, items: []});
+    const [isCreatingChat, setIsCreatingChat] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [error, setError] = useState("")
     const [selectedChatId, setSelectedChatId] = useState(null);
-    const socket = useRef()
+    const socket = useRef<WebSocket | null>()
     const [ws, setWs] = useState(null);
 
-    // const esablish = () => {
-    //     establishWebSocketConnection()
-    // }
-
     useEffect(() => {
-        // Функция для загрузки чатов
-        // const fetchChats = async () => {
-        //     setIsLoading(true)
-        //     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/chats`); // Получаем список чатов
-        //     const data = await response.json();
-        //     setChats(data); // Сохраняем чаты в состоянии
-        //     setIsLoading(false)
-        // };
-        //
-        // fetchChats();
+        setIsLoading(true)
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/chats`, {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(response => response.json())
+            .then((data) => {
+                console.log(data)
+                setChats(data);
+            })
+            .catch((e) => {
+                setError("Не удалось загрузить чаты")
+            })
+            .finally(() => {
+                console.log('finally')
+                setIsLoading(false)
+            })
+
 
         // Устанавливаем WebSocket соединение
         // const ws = establishWebSocketConnection();
@@ -56,30 +65,27 @@ export function MessagesPanel() {
         //     });
         // };
 
-        // return () => {
-        //     ws.close(); // Закрываем соединение при размонтировании компонента
-        // };
+        return () => {
+            socket.current?.close(); // Закрываем соединение при размонтировании компонента
+        };
     }, []);
 
 
     return (
         <div className="flex flex-grow rounded-xl bg-white h-full border-2">
-            <div className="flex flex-col w-1/3 border-r-2">
+            <div className="flex flex-col w-1/3 border-r-2 relative">
                 <div className="flex justify-between items-center p-5 border-b-2">
                     <h2 className="font-bold">Сообщения</h2>
-                    <button className="w-[26px] h-[23px]">
-                        <NewMessageIcon />
+                    <button onClick={() => setIsCreatingChat(true)} className="w-[26px] h-[23px]">
+                        <NewMessageIcon/>
                     </button>
 
                 </div>
-
-                <div>
-                    <ChatList props={isLoading} />
-                </div>
+                {isCreatingChat && <NewChat setIsCreatingChat={setIsCreatingChat} />}
+                {isLoading ? <ChatListLoading/> : <ChatList data={chats}/>}
             </div>
             <div className="w-2/3">
-                <Conversation />
-                <button onClick={esablish}>Establish</button>
+                <Conversation/>
             </div>
         </div>
     )
