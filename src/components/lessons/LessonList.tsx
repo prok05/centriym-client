@@ -1,7 +1,7 @@
 'use client'
 
 import {useUserID} from "@/hooks/useUserID";
-import LessonI from "@/lib/types";
+import {LessonI} from "@/lib/types";
 import {useEffect, useState} from "react";
 import {LessonItem} from "@/components/lessons/LessonItem";
 import {useLessonStore} from "@/store/lessonStore";

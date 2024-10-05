@@ -1,4 +1,4 @@
-export default interface LessonI  {
+export interface LessonI  {
     id: number
     lessonType: number
     date: string
@@ -8,7 +8,7 @@ export default interface LessonI  {
     streaming: string[]
 }
 
-export default interface ChatI {
+export interface ChatI {
     id: number
     chatType: string
     name: string

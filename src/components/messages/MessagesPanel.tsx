@@ -4,31 +4,34 @@ import ChatList from "@/components/messages/ChatList";
 import {Conversation} from "@/components/messages/Conversation";
 import NewMessageIcon from "@/components/icons/NewMessageIcon";
 import {useEffect, useRef, useState} from "react";
-import ChatI from "@/lib/types";
 import {establishWebSocketConnection} from "@/ws/websocket";
+import {ChatI} from "@/lib/types";
+import ChatListLoadingItem from "@/components/messages/ChatListLoadingItem";
+import ChatListLoading from "@/components/messages/ChatListLoading";
 
 export function MessagesPanel() {
     const [chats, setChats] = useState<ChatI[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [selectedChatId, setSelectedChatId] = useState(null);
-    const socket = useRef()
+    const socket = useRef<WebSocket | null>()
     const [ws, setWs] = useState(null);
 
-    // const esablish = () => {
-    //     establishWebSocketConnection()
-    // }
-
     useEffect(() => {
-        // Функция для загрузки чатов
-        // const fetchChats = async () => {
-        //     setIsLoading(true)
-        //     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/chats`); // Получаем список чатов
-        //     const data = await response.json();
-        //     setChats(data); // Сохраняем чаты в состоянии
-        //     setIsLoading(false)
-        // };
-        //
-        // fetchChats();
+        setIsLoading(true)
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/chats`, {
+            method: "GET",
+            credentials: "include"
+        })
+            .then(response => response.json())
+            .then((data) => {
+                // setChats(data)
+                setTimeout(() => {
+                    setChats(data);
+                    console.log("tick")
+                    }, 5000)
+            })
+            .finally(() => setIsLoading(false))
+
 
         // Устанавливаем WebSocket соединение
         // const ws = establishWebSocketConnection();
@@ -56,9 +59,9 @@ export function MessagesPanel() {
         //     });
         // };
 
-        // return () => {
-        //     ws.close(); // Закрываем соединение при размонтировании компонента
-        // };
+        return () => {
+            socket.current?.close(); // Закрываем соединение при размонтировании компонента
+        };
     }, []);
 
 
@@ -68,18 +71,16 @@ export function MessagesPanel() {
                 <div className="flex justify-between items-center p-5 border-b-2">
                     <h2 className="font-bold">Сообщения</h2>
                     <button className="w-[26px] h-[23px]">
-                        <NewMessageIcon />
+                        <NewMessageIcon/>
                     </button>
 
                 </div>
 
-                <div>
-                    <ChatList props={isLoading} />
-                </div>
+                {isLoading ? <ChatListLoading/> : <ChatList chats={chats} />}
+                {/*<ChatList isLoading={isLoading} chats={chats}/>*/}
             </div>
             <div className="w-2/3">
-                <Conversation />
-                <button onClick={esablish}>Establish</button>
+                <Conversation/>
             </div>
         </div>
     )
