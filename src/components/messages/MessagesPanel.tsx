@@ -3,40 +3,39 @@
 import ChatList from "@/components/messages/ChatList";
 import {Conversation} from "@/components/messages/Conversation";
 import NewMessageIcon from "@/components/icons/NewMessageIcon";
-import {useEffect, useRef, useState} from "react";
-import {establishWebSocketConnection} from "@/ws/websocket";
-import {FetchChatI} from "@/lib/types";
-import ChatListLoadingItem from "@/components/messages/ChatListLoadingItem";
+import {Suspense, useEffect, useRef, useState} from "react";
 import ChatListLoading from "@/components/messages/ChatListLoading";
 import NewChat from "@/components/messages/NewChat";
+import {chatsResource} from "@/resources/resources";
+import ErrorBoundary from "@/components/error/ErrorBoundary";
 
 export function MessagesPanel() {
-    const [chats, setChats] = useState<FetchChatI>({count: 0, items: []});
+    // const [chats, setChats] = useState<FetchChatI>({count: 0, items: []});
     const [isCreatingChat, setIsCreatingChat] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [error, setError] = useState("")
     const [selectedChatId, setSelectedChatId] = useState(null);
     const socket = useRef<WebSocket | null>()
     const [ws, setWs] = useState(null);
 
+    // const chats = chatsResource.read()
+
     useEffect(() => {
-        setIsLoading(true)
-        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/chats`, {
-            method: "GET",
-            credentials: "include"
-        })
-            .then(response => response.json())
-            .then((data) => {
-                console.log(data)
-                setChats(data);
-            })
-            .catch((e) => {
-                setError("Не удалось загрузить чаты")
-            })
-            .finally(() => {
-                console.log('finally')
-                setIsLoading(false)
-            })
+        // setIsLoading(true)
+        // fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/chats`, {
+        //     method: "GET",
+        //     credentials: "include"
+        // })
+        //     .then(response => response.json())
+        //     .then((data) => {
+        //         console.log(data)
+        //         setChats(data);
+        //     })
+        //     .catch((e) => {
+        //         setError("Не удалось загрузить чаты")
+        //     })
+        //     .finally(() => {
+        //         setIsLoading(false)
+        //     })
 
 
         // Устанавливаем WebSocket соединение
@@ -81,8 +80,10 @@ export function MessagesPanel() {
                     </button>
 
                 </div>
-                {isCreatingChat && <NewChat setIsCreatingChat={setIsCreatingChat} />}
-                {isLoading ? <ChatListLoading/> : <ChatList data={chats}/>}
+                {isCreatingChat && <NewChat setIsCreatingChat={setIsCreatingChat}/>}
+                <div>
+                    <ChatList/>
+                </div>
             </div>
             <div className="w-2/3">
                 <Conversation/>

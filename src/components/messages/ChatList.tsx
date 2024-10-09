@@ -1,26 +1,41 @@
 'use client';
 
-import ChatItem from "@/components/messages/MessageItem";
-import { useRouter } from 'next/navigation';
-import {useEffect} from "react";
 import {ChatI, FetchChatI} from "@/lib/types";
+import {chatsResource, teachersResource} from "@/resources/resources";
+import {Suspense} from "react";
+import ChatListLoading from "@/components/messages/ChatListLoading";
+import {useInnerUserStore} from "@/store/innerUserStore";
+import ChatListItem from "@/components/messages/ChatListItem";
 
-interface Props  {
+interface Props {
     data: FetchChatI
 }
 
 // @ts-ignore
-export default function ChatList(props: Props) {
+export default function ChatList() {
+    const innerUser = useInnerUserStore((state) => state.innerUser)
 
-    if (props.data.count == 0) {
-        return <div>Список чатов пуст</div>
+    function List() {
+        const chats = chatsResource.read()
+        if (innerUser) {
+            console.log(chats)
+            return (
+                <div>
+                    <ul>
+                        {chats.items.map((chat) => {
+                            return <ChatListItem chat={chat} className="p-2 hover:bg-purple-sec cursor-pointer"
+                                       key={chat.id}>1</ChatListItem>
+                        })}
+                    </ul>
+                </div>)
+        }
     }
 
     return (
         <div>
-            {props.data.items[0].id}
+            <Suspense fallback={<ChatListLoading/>}>
+                <List/>
+            </Suspense>
         </div>
     )
-
-
 }

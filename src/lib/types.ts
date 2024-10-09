@@ -1,3 +1,12 @@
+export interface InnerUserI {
+    id: number
+    phone: string
+    firstName: string
+    lastName: string
+    middleName: string
+    role: string
+}
+
 export interface LessonI  {
     id: number
     lessonType: number

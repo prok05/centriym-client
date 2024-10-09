@@ -1,22 +1,45 @@
 import CloseIcon from '@mui/icons-material/Close';
 import {Suspense, useEffect, useState} from "react";
 import {CircularProgress} from "@mui/material";
+import {teachersResource} from "@/resources/resources";
+import {useInnerUserStore} from "@/store/innerUserStore";
+import {InnerUserI} from "@/lib/types";
 
 export default function NewChat({setIsCreatingChat}) {
-    const [isLoading, setIsLoading] = useState(false);
+    const innerUser = useInnerUserStore((state) => state.innerUser)
+    const [selectedTeacher, setSelecterTeacher] = useState()
+
+    function TeacherList() {
+        if (innerUser) {
+            let users;
+            if (innerUser?.role == "student") {
+                users = teachersResource.read()
+
+                return (
+                    <ul>
+                        {users.map((teacher) => {
+                            return <li className="p-2 hover:bg-purple-sec cursor-pointer" key={teacher.id}>{teacher.first_name} {teacher.last_name}</li>
+                        })}
+                    </ul>
+                )
+            }
+        }
+    }
 
     return (
         <div className="p-5 absolute top-0 left-0 w-full rounded-xl h-full bg-white z-10 ">
-            <div className="flex justify-between mb-10">
-                <div>Новый чат</div>
+            <div className="flex justify-between mb-5">
+                <div className="font-bold">Новый чат</div>
                 <button className="w-[26px] h-[23px]" onClick={() => setIsCreatingChat(prev => !prev)}><CloseIcon/>
                 </button>
             </div>
             <div>
-                <div>Список учителей</div>
-                <Suspense fallback={<CircularProgress color={"secondary"}/>}>
-
-                </Suspense>
+                <div className="mb-2 pb-1 border-b-2">Список преподавателей</div>
+                <div>
+                    <Suspense fallback={<CircularProgress color={"secondary"}/>}>
+                        <TeacherList />
+                    </Suspense>
+                </div>
             </div>
         </div>
     )

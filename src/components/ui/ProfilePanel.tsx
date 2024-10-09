@@ -36,7 +36,7 @@ export function ProfilePanel() {
                         <div className="flex flex-col flex-grow items-center py-8 px-4">
                             <div className="mb-4">
                                 {/*@ts-ignore*/}
-                                <Avatar classname="mb-2" sx={{bgcolor: '#702dff', width: 56, height: 56}}>
+                                <Avatar className="mb-2" sx={{bgcolor: '#702dff', width: 56, height: 56}}>
                                     {/*@ts-ignore*/}
                                     {firstName[0]}{lastName[0]}
                                 </Avatar>
