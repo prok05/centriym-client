@@ -7,12 +7,13 @@ import {NoChat} from "@/components/messages/NoChat";
 import {Suspense} from 'react'
 
 // @ts-ignore
-export function Conversation() {
-    const [selectedChat, setSelectedChat] = useState(null);
+export function Conversation({selectedChat, setSelectedChat}) {
 
     return (
             <div className="h-full">
-                {selectedChat ? (<OpenedChat/>) : (<NoChat/>)}
+                {selectedChat ? (<OpenedChat
+                    setSelectedChat={setSelectedChat}
+                    selectedChat={selectedChat}/>) : (<NoChat/>)}
             </div>
     )
 }

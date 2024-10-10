@@ -10,60 +10,18 @@ import {chatsResource} from "@/resources/resources";
 import ErrorBoundary from "@/components/error/ErrorBoundary";
 
 export function MessagesPanel() {
-    // const [chats, setChats] = useState<FetchChatI>({count: 0, items: []});
     const [isCreatingChat, setIsCreatingChat] = useState<boolean>(false)
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [selectedChatId, setSelectedChatId] = useState(null);
+    const [selectedChat, setSelectedChat] = useState(null);
     const socket = useRef<WebSocket | null>()
     const [ws, setWs] = useState(null);
 
-    // const chats = chatsResource.read()
-
     useEffect(() => {
-        // setIsLoading(true)
-        // fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/chats`, {
-        //     method: "GET",
-        //     credentials: "include"
-        // })
-        //     .then(response => response.json())
-        //     .then((data) => {
-        //         console.log(data)
-        //         setChats(data);
-        //     })
-        //     .catch((e) => {
-        //         setError("Не удалось загрузить чаты")
-        //     })
-        //     .finally(() => {
-        //         setIsLoading(false)
-        //     })
-
-
         // Устанавливаем WebSocket соединение
-        // const ws = establishWebSocketConnection();
 
         socket.current = new WebSocket('ws://localhost:8080/ws')
         socket.current.onopen = () => {
             console.log("Connected")
         }
-        // Обработка входящих сообщений
-        // ws.onmessage = (event) => {
-        //     const newMessage = JSON.parse(event.data);
-        //     // Обновление чата с новым сообщением
-        //     setChats((prevChats) => {
-        //         // Логика обновления чата с новым сообщением
-        //         // Например, добавление нового сообщения в последний чат
-        //         return prevChats.map(chat => {
-        //             if (chat.id === newMessage.chatID) {
-        //                 return {
-        //                     ...chat,
-        //                     lastMessage: newMessage,
-        //                 };
-        //             }
-        //             return chat;
-        //         });
-        //     });
-        // };
-
         return () => {
             socket.current?.close(); // Закрываем соединение при размонтировании компонента
         };
@@ -81,12 +39,12 @@ export function MessagesPanel() {
 
                 </div>
                 {isCreatingChat && <NewChat setIsCreatingChat={setIsCreatingChat}/>}
-                <div>
-                    <ChatList/>
+                <div className="h-full">
+                    <ChatList setSelectedChat={setSelectedChat}/>
                 </div>
             </div>
             <div className="w-2/3">
-                <Conversation/>
+                <Conversation setSelectedChat={setSelectedChat} selectedChat={selectedChat}/>
             </div>
         </div>
     )

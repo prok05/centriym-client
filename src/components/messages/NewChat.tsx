@@ -18,7 +18,7 @@ export default function NewChat({setIsCreatingChat}) {
                 return (
                     <ul>
                         {users.map((teacher) => {
-                            return <li className="p-2 hover:bg-purple-sec cursor-pointer" key={teacher.id}>{teacher.first_name} {teacher.last_name}</li>
+                            return <li className="p-2 hover:bg-purple-sec cursor-pointer transition-colors" key={teacher.id}>{teacher.first_name} {teacher.last_name}</li>
                         })}
                     </ul>
                 )

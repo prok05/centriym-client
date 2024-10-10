@@ -3,9 +3,9 @@ export function createResource(fetchFunction, source) {
     let result;
     const suspender = fetchFunction()
         .then((res) => {
-            // if (!res.ok) {
-            //     throw new Error("Не удалось загрузить данные");
-            // }
+            if (!res.ok) {
+                throw new Error("Не удалось загрузить данные");
+            }
             return res.json()
         })
         .then(
@@ -39,9 +39,9 @@ export const teachersResource = createResource(() =>
     })
 , "teachers");
 
-export const chatsResource = createResource(() =>
-    fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/chats`, {
-        method: "GET",
-        credentials: "include"
-    })
-, "chats");
+// export const chatsResource = createResource(() =>
+//     fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/chats`, {
+//         method: "GET",
+//         credentials: "include"
+//     })
+// , "chats");
