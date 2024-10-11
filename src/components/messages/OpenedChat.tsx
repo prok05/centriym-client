@@ -12,7 +12,7 @@ export function OpenedChat({selectedChat, setSelectedChat}) {
             <div className="p-5 flex items-center border-b-2">
                 <p>Имя отправителя</p>
                 <button onClick={closeChat}
-                    className="ml-auto mr-4">х</button>
+                    className="ml-auto mr-4">х</button>`
             </div>
             <div className="bg-gray-50 h-full flex flex-col">
                 <p>Сообщения</p>

@@ -6,12 +6,12 @@ import NewMessageIcon from "@/components/icons/NewMessageIcon";
 import {Suspense, useEffect, useRef, useState} from "react";
 import ChatListLoading from "@/components/messages/ChatListLoading";
 import NewChat from "@/components/messages/NewChat";
-import {chatsResource} from "@/resources/resources";
 import ErrorBoundary from "@/components/error/ErrorBoundary";
 
 export function MessagesPanel() {
     const [isCreatingChat, setIsCreatingChat] = useState<boolean>(false)
     const [selectedChat, setSelectedChat] = useState(null);
+    const [selectedUser, setSelectedUser] = useState(null)
     const socket = useRef<WebSocket | null>()
     const [ws, setWs] = useState(null);
 
@@ -36,16 +36,26 @@ export function MessagesPanel() {
                     <button onClick={() => setIsCreatingChat(true)} className="w-[26px] h-[23px]">
                         <NewMessageIcon/>
                     </button>
-
                 </div>
-                {isCreatingChat && <NewChat setIsCreatingChat={setIsCreatingChat}/>}
+
+                {/*создание нового чата*/}
+                {isCreatingChat && <NewChat
+                    setSelectedUser={setSelectedUser}
+                    setIsCreatingChat={setIsCreatingChat}/>}
+
                 <div className="h-full">
                     <ChatList setSelectedChat={setSelectedChat}/>
                 </div>
             </div>
             <div className="w-2/3">
-                <Conversation setSelectedChat={setSelectedChat} selectedChat={selectedChat}/>
+                <Conversation
+                    setSelectedChat={setSelectedChat}
+                    selectedChat={selectedChat}
+                    selectedUser={selectedUser}
+                    setSelectedUser={setSelectedUser}
+                />
             </div>
+
         </div>
     )
 }

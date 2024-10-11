@@ -5,20 +5,23 @@ import {teachersResource} from "@/resources/resources";
 import {useInnerUserStore} from "@/store/innerUserStore";
 import {InnerUserI} from "@/lib/types";
 
-export default function NewChat({setIsCreatingChat}) {
+export default function NewChat({setIsCreatingChat, setSelectedUser}) {
     const innerUser = useInnerUserStore((state) => state.innerUser)
-    const [selectedTeacher, setSelecterTeacher] = useState()
+
+    function createChat()
 
     function TeacherList() {
         if (innerUser) {
             let users;
             if (innerUser?.role == "student") {
                 users = teachersResource.read()
-
                 return (
                     <ul>
-                        {users.map((teacher) => {
-                            return <li className="p-2 hover:bg-purple-sec cursor-pointer transition-colors" key={teacher.id}>{teacher.first_name} {teacher.last_name}</li>
+                        {users.map((user) => {
+                            return <li
+                                onClick={() => setSelectedUser(user.id)}
+                                className="p-2 hover:bg-purple-sec cursor-pointer transition-colors"
+                                key={user.id}>{user.first_name} {user.last_name}</li>
                         })}
                     </ul>
                 )
@@ -30,7 +33,12 @@ export default function NewChat({setIsCreatingChat}) {
         <div className="p-5 absolute top-0 left-0 w-full rounded-xl h-full bg-white z-10 ">
             <div className="flex justify-between mb-5">
                 <div className="font-bold">Новый чат</div>
-                <button className="w-[26px] h-[23px]" onClick={() => setIsCreatingChat(prev => !prev)}><CloseIcon/>
+                <button className="w-[26px] h-[23px]"
+                        onClick={() => {
+                            setIsCreatingChat(prev => !prev)
+                            setSelectedUser(null)
+                        }}>
+                    <CloseIcon/>
                 </button>
             </div>
             <div>

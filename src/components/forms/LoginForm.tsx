@@ -44,7 +44,6 @@ export default function LoginForm() {
         setError(null);
 
         try {
-            console.log(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/login`)
             const formData = new FormData(event.currentTarget);
 
             const formPhone = formData.get("phone")?.toString()
