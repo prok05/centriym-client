@@ -18,10 +18,6 @@ export function NavigationPanel() {
 
     async function handleLogout() {
         try {
-            // const data = {
-            //     "phone": phone,
-            //     "password": formData.get("password")
-            // }
             const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/logout`, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -43,9 +39,8 @@ export function NavigationPanel() {
     }
 
     return (
-        <div className="flex flex-col w-1/6 flex-grow py-2 px-5 shadow-[4px_0_8px_rgba(0,0,0,0.1)] z-10">
+        <div className="flex flex-col w-1/12 flex-grow py-2 px-5 shadow-[4px_0_8px_rgba(0,0,0,0.1)] z-10">
             <div className="flex flex-col flex-grow">
-                <SmallLogo/>
                 <nav>
                     <p className="font-semibold text-gray-400 uppercase mb-2">Обзор</p>
                     <ul className="font-medium">
@@ -76,28 +71,6 @@ export function NavigationPanel() {
                     </ul>
                 </nav>
             </div>
-
-
-            <nav className="mt-auto pb-5">
-                <p className="font-semibold uppercase mb-2 text-gray-400">Настройки</p>
-                <ul className="font-medium">
-                    <li className="flex items-center mb-1">
-                        <SettingsIcon
-                            className="mr-3"
-                            stroke={pathname === '/dashboard/settings' ? "#702DFF" : "#202020"} />
-                        <Link
-                            className={pathname === '/dashboard/settings' ? "text-purple-main" : "text-grey-100"}
-                            href="/dashboard/settings">Настройки</Link>
-                    </li>
-                    <li className="flex items-center">
-                        <LogoutIcon
-                            className="mr-3 "
-                        />
-                        <button className="text-[#F13E3E]" onClick={handleLogout}>Выход</button>
-                    </li>
-                </ul>
-            </nav>
-
         </div>
     )
 }

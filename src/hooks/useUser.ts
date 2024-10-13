@@ -5,6 +5,7 @@ interface User {
     id: number;
     name: string;
     balance: string;
+    paid_lesson_count: number;
 }
 
 interface UseUserResult {
@@ -30,7 +31,6 @@ export function useUser(): UseUserResult {
                     throw new Error('Failed to fetch user ID');
                 }
                 const data = await res.json();
-                console.log('data:', data.userID)
                 setUserID(data.userID);
             } catch (err: any) {
                 console.log(err)
@@ -59,6 +59,7 @@ export function useUser(): UseUserResult {
                 }
 
                 const userData = await response.json();
+                console.log("userdata:", userData)
                 setUser(userData);
             } catch (err: any) {
                 setError(err.message);

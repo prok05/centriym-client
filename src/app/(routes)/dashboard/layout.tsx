@@ -5,6 +5,7 @@ import {ProfilePanel} from "@/components/ui/ProfilePanel";
 import {useUserID} from "@/hooks/useUserID";
 import {useInnerUserStore} from "@/store/innerUserStore";
 import {useEffect} from "react";
+import {Header} from "@/components/ui/Header";
 
 export default function DashboardLayout({
     children, // will be a page or nested layout
@@ -32,13 +33,14 @@ export default function DashboardLayout({
     }, [userID, innerUser, setInnerUser]);
 
     return (
-        <section className="flex h-screen">
-            <NavigationPanel />
-            <div className="w-2/3 bg-gray-100 p-10 overflow-hidden">
+        <section className="">
+            <Header />
+            <div className="flex h-screen">
+                <NavigationPanel />
+                <div className="bg-gray-50 p-10 overflow-hidden w-10/12 z-1">
                     {children}
+                </div>
             </div>
-            <ProfilePanel />
-
         </section>
     )
 }
