@@ -21,7 +21,7 @@ export default function ChatListItem({chat, setSelectedChat}) {
                 <p>{chat.last_message.content}</p>
             </div>
             <div className="ml-auto w-1/6 text-gray-500">
-                {formatDate(chat.last_message.created_at)}
+                {/*{formatDate(chat.last_message.created_at)}*/}
             </div>
         </div>
     )
