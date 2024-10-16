@@ -98,7 +98,7 @@ export function NavigationPanel() {
                                 }} />
                             <Link
                                 className={pathname === '/dashboard/homework' ? "text-purple-main" : "text-grey-100"}
-                                href="/dashboard/homework">Д/З</Link>
+                                href="/dashboard/homework">Д/ЗЗ</Link>
                         </li>
                     </ul>
                 </nav>
