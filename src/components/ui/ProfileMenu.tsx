@@ -32,19 +32,22 @@ export function ProfileMenu({paid_lesson_count, isLoading}) {
     return (
         <div>
             <ul>
+                <li className="flex items-center p-3 hover-bg-purple-sec border-b">
                     <div className="mr-3">
                         <BookOutlinedIcon/>
                     </div>
                     <div>Оплачено уроков: {isLoading ?
-                        <Skeleton width="30px" variant="text" sx={{ fontSize: '1rem' }}/> : paid_lesson_count}</div>
+                        <Skeleton width="30px" variant="text" sx={{fontSize: '1rem'}}/> : paid_lesson_count}</div>
                 </li>
+                <li className="flex items-center p-3">
                     <div className="mr-3">
                         <SettingsIcon/>
                     </div>
                     <Link href="/dashboard/settings">Настройки</Link>
                 </li>
+                <li className="flex items-center p-3">
                     <div className="mr-3">
-                        <LogoutIcon sx={{color:"#F13E3E"}}/>
+                        <LogoutIcon sx={{color: "#F13E3E"}}/>
                     </div>
                     <button className="text-[#F13E3E]" onClick={handleLogout}>Выход</button>
                 </li>

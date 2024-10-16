@@ -30,6 +30,7 @@ export function Header() {
     const iconStyles: SxProps = {
         color: "#702DFF",
         backgroundColor: "rgba(112,45,255,0.08)",
+        marginRight: 2,
         "&.MuiIconButton-root": {
             "&:hover": {
                 backgroundColor: "rgba(112,45,255,0.22)"
@@ -45,6 +46,7 @@ export function Header() {
             backgroundColor: '#ffffff',
             color: '#202020',
             minWidth: 200,
+            padding: 0,
             fontSize: theme.typography.pxToRem(12),
             border: '1px solid #dadde9',
         },
@@ -59,18 +61,21 @@ export function Header() {
                     </div>
                     <Box sx={{flexGrow: 1}}/>
                     <Box sx={{display: {xs: 'none', md: 'flex'}}}>
+                        <IconButton sx={iconStyles}>
                             <Badge badgeContent={4} color="error">
                                 <CardGiftcardIcon fontSize="medium"/>
                             </Badge>
                         </IconButton>
                         <IconButton sx={iconStyles} size="medium" aria-label="show 4 new mails">
                             <Badge badgeContent={4} color="error">
+                                <ShoppingCartOutlinedIcon />
                             </Badge>
                         </IconButton>
                         <IconButton
                             sx={iconStyles}
                         >
                             <Badge badgeContent={17} color="error">
+                                <CircleNotificationsIcon />
                             </Badge>
                         </IconButton>
 
@@ -79,8 +84,10 @@ export function Header() {
                                 <ProfileMenu isLoading={isLoading} paid_lesson_count={user?.paid_lesson_count}/>
                             </Fragment>
                         }>
+                            <div>
                                 <AccountCircleIcon fontSize="large" sx={{marginRight: "10px", color: "#979797"}}/>
-                                {isLoading ? <Skeleton width="50px" variant="text" sx={{ fontSize: '1rem' }}/> : firstName}
+                                {isLoading ?
+                                    <Skeleton width="50px" variant="text" sx={{fontSize: '1rem'}}/> : firstName}
                             </div>
                         </ProfileTooltip>
                     </Box>
