@@ -5,28 +5,39 @@ import {LessonI} from "@/lib/types";
 import {useEffect, useState} from "react";
 import {LessonItem} from "@/components/lessons/LessonItem";
 import {useLessonStore} from "@/store/lessonStore";
+import {getCurrentMonth} from "@/utils/utils";
+// import MonthPicker from 'react-lite-month-picker';
+import {MonthPicker, MonthInput} from 'react-lite-month-picker';
 
 
 export function LessonList() {
     const userID = useUserID()
     const lessons = useLessonStore((state) => state.lessons);
-    const setLessons = useLessonStore((state) => state.setLessons)
+    const setLessons = useLessonStore((state) => state.setLessons);
+
+    const [isPickerOpen, setIsPickerOpen] = useState(false);
 
     useEffect(() => {
         if (lessons) return;
+
+        const month = getCurrentMonth()
+        console.log(month)
 
         if (userID) {
             fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/lessons/future`, {
                 method: "POST",
                 body: JSON.stringify({
                     "customer_id": userID,
-                    "status": 1,
+                    // "status": 1,
+                    "date_from": "2024-10-01",
+                    "date_to": "2024-10-31",
                     "page": 0
                 })
             })
                 .then(response => response.json())
                 .then((data) => {
                     setLessons(data.items)
+                    console.log(data.items)
                 })
         }
 
@@ -35,8 +46,25 @@ export function LessonList() {
 
     return (
         <div className="flex flex-col flex-grow min-h-0">
+            <div>
+                <MonthInput
+                    lang="ru"
+                    // selected={selectedMonthData}
+                    setShowMonthPicker={setIsPickerOpen}
+                    showMonthPicker={isPickerOpen}
+                />
+                {isPickerOpen ? (
+                    <MonthPicker
+                        lang="ru"
+                        setIsOpen={setIsPickerOpen}
+                        // selected={selectedMonthData}
+                        // onChange={setSelectedMonthData}
+                    />
+                ) : null}
+            </div>
+
             <div className="flex flex-wrap overflow-y-auto">
-                {lessons?.map((lesson) =>  (
+                {lessons?.map((lesson) => (
                     <LessonItem key={lesson.id} lesson={lesson}/>
                 ))}
             </div>

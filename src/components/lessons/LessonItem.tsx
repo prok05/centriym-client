@@ -28,7 +28,7 @@ export function LessonItem(props: Props) {
                         Предмет: {props.lesson.subjectName}
                     </Typography>
                     <Typography variant="h5" component="div">
-                        Ссылка: {props.lesson.streaming[0]}
+                        Ссылка: {props.lesson.streaming == null ? 'Нет' : props.lesson.streaming[0]}
                         <br/>
                     </Typography>
                 </CardContent>

@@ -21,6 +21,7 @@
     "next-auth": "^4.24.7",
     "react": "^18",
     "react-dom": "^18",
+    "react-lite-month-picker": "^1.2.19",
     "react-phone-number-input": "^3.4.8",
     "react-use-websocket": "^4.8.1",
     "zustand": "^5.0.0-rc.2"
