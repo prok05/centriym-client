@@ -6,8 +6,7 @@ import {useEffect, useState} from "react";
 import {LessonItem} from "@/components/lessons/LessonItem";
 import {useLessonStore} from "@/store/lessonStore";
 import {getCurrentMonth} from "@/utils/utils";
-// import MonthPicker from 'react-lite-month-picker';
-import {MonthPicker, MonthInput} from 'react-lite-month-picker';
+import {LessonCalendar} from "@/components/lessons/Calendar";
 
 
 export function LessonList() {
@@ -47,27 +46,14 @@ export function LessonList() {
     return (
         <div className="flex flex-col flex-grow min-h-0">
             <div>
-                <MonthInput
-                    lang="ru"
-                    // selected={selectedMonthData}
-                    setShowMonthPicker={setIsPickerOpen}
-                    showMonthPicker={isPickerOpen}
-                />
-                {isPickerOpen ? (
-                    <MonthPicker
-                        lang="ru"
-                        setIsOpen={setIsPickerOpen}
-                        // selected={selectedMonthData}
-                        // onChange={setSelectedMonthData}
-                    />
-                ) : null}
+                <LessonCalendar />
             </div>
 
-            <div className="flex flex-wrap overflow-y-auto">
-                {lessons?.map((lesson) => (
-                    <LessonItem key={lesson.id} lesson={lesson}/>
-                ))}
-            </div>
+            {/*<div className="flex flex-wrap overflow-y-auto">*/}
+            {/*    {lessons?.map((lesson) => (*/}
+            {/*        <LessonItem key={lesson.id} lesson={lesson}/>*/}
+            {/*    ))}*/}
+            {/*</div>*/}
         </div>
     )
 }

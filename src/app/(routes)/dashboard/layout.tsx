@@ -33,9 +33,9 @@ export default function DashboardLayout({
     }, [userID, innerUser, setInnerUser]);
 
     return (
-        <section className="">
+        <section className="h-screen">
             <Header />
-            <div className="flex h-screen">
+            <div className="flex">
                 <NavigationPanel />
                 <div className="bg-gray-50 p-10 overflow-hidden w-10/12 z-1">
                     {children}
