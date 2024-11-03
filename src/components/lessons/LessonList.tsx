@@ -6,7 +6,7 @@ import {useEffect, useState} from "react";
 import {LessonItem} from "@/components/lessons/LessonItem";
 import {useLessonStore} from "@/store/lessonStore";
 import {getCurrentMonth} from "@/utils/utils";
-import {LessonCalendar} from "@/components/lessons/Calendar";
+import {LessonCalendar} from "@/components/lessons/LessonCalendar";
 
 
 export function LessonList() {
@@ -14,7 +14,6 @@ export function LessonList() {
     const lessons = useLessonStore((state) => state.lessons);
     const setLessons = useLessonStore((state) => state.setLessons);
 
-    const [isPickerOpen, setIsPickerOpen] = useState(false);
 
     useEffect(() => {
         if (lessons) return;
@@ -44,8 +43,8 @@ export function LessonList() {
 
 
     return (
-        <div className="flex flex-col flex-grow min-h-0">
-            <div>
+        <div className="flex flex-col h-full">
+            <div className="h-full p-4">
                 <LessonCalendar />
             </div>
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Arimo } from "next/font/google";
 import "./globals.css";
-import 'react-big-calendar/lib/css/react-big-calendar.css'
+
 
 
 const inter = Inter({ subsets: ["cyrillic"] });
