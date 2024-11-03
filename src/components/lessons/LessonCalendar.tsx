@@ -7,6 +7,8 @@ import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import HelpIcon from '@mui/icons-material/Help';
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import './calendar.css'
+import {getEventsFromLessons} from "@/utils/utils";
+import {useLessonStore} from "@/store/lessonStore";
 
 const localizer = momentLocalizer(moment)
 moment.locale("ru");
@@ -18,9 +20,11 @@ const VIEW_OPTIONS = [
     { id: Views.DAY, label: "День" },
 ];
 
-export function LessonCalendar() {
-    const [date, setDate] = useState<Date>(moment().toDate());
+// @ts-ignore
+export function LessonCalendar({date, setDate}) {
     const [view, setView] = useState<(typeof Views)[Keys]>(Views.MONTH);
+    const lessons = useLessonStore((state) => state.lessons);
+
     const {defaultDate, messages} = useMemo(
         () => ({
             defaultDate: Date.now(),
@@ -76,6 +80,9 @@ export function LessonCalendar() {
         <div className="h-full flex flex-col">
             <div className="flex justify-between p-4">
                 <div>
+                    <button onClick={() => {
+                        console.log(getEventsFromLessons(lessons))
+                    }}>Дата</button>
                     <button className="px-4 py-2 bg-purple-main text-white"
                             onClick={onTodayClick}>Сегодня
                     </button>
@@ -108,7 +115,7 @@ export function LessonCalendar() {
                     localizer={localizer}
                     defaultView={Views.MONTH}
                     // defaultDate={date}
-                    // events={events}
+                    events={getEventsFromLessons(lessons)}
                     culture={"ru"}
                     messages={messages}
                     startAccessor="start"
