@@ -9,6 +9,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css'
 import './calendar.css'
 import {getEventsFromLessons} from "@/utils/utils";
 import {useLessonStore} from "@/store/lessonStore";
+import {CalendarEvent} from "@/components/lessons/CalendarEvent";
 
 const localizer = momentLocalizer(moment)
 moment.locale("ru");
@@ -78,11 +79,8 @@ export function LessonCalendar({date, setDate}) {
 
     return (
         <div className="h-full flex flex-col">
-            <div className="flex justify-between p-4">
+            <div className="flex justify-between p-1">
                 <div>
-                    <button onClick={() => {
-                        console.log(getEventsFromLessons(lessons))
-                    }}>Дата</button>
                     <button className="px-4 py-2 bg-purple-main text-white"
                             onClick={onTodayClick}>Сегодня
                     </button>
@@ -124,6 +122,9 @@ export function LessonCalendar({date, setDate}) {
                     onNavigate={setDate}
                     date={date}
                     view={view}
+                    components={{
+                        month: {event: CalendarEvent}
+                    }}
                 />
             </div>
         </div>

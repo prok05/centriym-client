@@ -1,3 +1,11 @@
 .rbc-today {
     background-color: #702DFF14;
 }
+
+.rbc-event {
+    background-color: transparent;
+}
+
+.rbc-event.rbc-selected {
+    background-color: transparent;
+}

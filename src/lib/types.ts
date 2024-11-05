@@ -28,3 +28,10 @@ export interface FetchChatI {
     count: number
     items: ChatI[]
 }
+
+export interface CalendarEventI {
+    title: string
+    status: number
+    start: Date
+    end: Date
+}

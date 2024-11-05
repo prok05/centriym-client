@@ -40,7 +40,7 @@ export default function DashboardLayout({
             <section className="flex-1 overflow-y-auto">
                 <div className="flex h-full">
                     <NavigationPanel/>
-                    <div className="bg-gray-50 p-10 overflow-hidden w-10/12 z-1">
+                    <div className="bg-gray-50 p-5 overflow-hidden w-10/12 z-1">
                         {children}
                     </div>
                 </div>

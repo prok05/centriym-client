@@ -6,7 +6,7 @@ import {LessonI} from "@/lib/types";
 import {useEffect, useState} from "react";
 import {LessonItem} from "@/components/lessons/LessonItem";
 import {useLessonStore} from "@/store/lessonStore";
-import {getCurrentMonth, getEventsFromLessons, getStartAndEndDate} from "@/utils/utils";
+import {getEventsFromLessons, getStartAndEndDate} from "@/utils/utils";
 import {LessonCalendar} from "@/components/lessons/LessonCalendar";
 import {Views} from "react-big-calendar";
 
