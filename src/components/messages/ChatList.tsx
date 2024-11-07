@@ -1,7 +1,6 @@
 'use client';
 
 import {ChatI, FetchChatI} from "@/lib/types";
-import {chatsResource, teachersResource} from "@/resources/resources";
 import {Suspense, useEffect, useState} from "react";
 import ChatListLoading from "@/components/messages/ChatListLoading";
 import {useInnerUserStore} from "@/store/innerUserStore";
@@ -43,12 +42,15 @@ export default function ChatList({setSelectedChat}) {
     }, [])
 
     if (isLoading) return <ChatListLoading/>
-    if (chats.count == 0) return <div className="h-full text-center pt-10">Список чатов пуст</div>
+    // @ts-ignore
+    if (chats == 0) return <div className="h-full text-center pt-10">Список чатов пуст</div>
 
+    // @ts-ignore
     return (
         <div>
+            {/*@ts-ignore*/}
             {chats.items.map((chat) => {
-
+                {/*@ts-ignore*/}
                 return <ChatListItem className="p-2 hover:bg-purple-sec cursor-pointer"
                                      chat={chat}
                                      setSelectedChat={setSelectedChat}

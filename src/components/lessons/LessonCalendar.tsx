@@ -80,11 +80,7 @@ export function LessonCalendar({date, setDate}) {
     return (
         <div className="h-full flex flex-col">
             <div className="flex justify-between p-1">
-                <div>
-                    <button className="px-4 py-2 bg-purple-main text-white"
-                            onClick={onTodayClick}>Сегодня
-                    </button>
-                </div>
+
                 <div className="flex items-center">
                     <button className="mr-6" onClick={onPrevClick}><NavigateBeforeIcon fontSize="large"/></button>
                     <div className="bg-[#702DFF14] py-2 px-4 rounded-xl">
@@ -97,22 +93,26 @@ export function LessonCalendar({date, setDate}) {
                     }}/></button>
                 </div>
 
+                {/*<div>*/}
+                {/*    {VIEW_OPTIONS.map(({id, label}) => (*/}
+                {/*        <button onClick={() => setView(id)}*/}
+                {/*                className={`px-4 py-2 ${*/}
+                {/*                    id === view*/}
+                {/*                        ? "bg-purple-main text-white" : "bg-transparent text-black hover:bg-gray-200"*/}
+                {/*                }`}>*/}
+                {/*            {label}</button>*/}
+                {/*    ))}*/}
+                {/*</div>*/}
                 <div>
-                    {VIEW_OPTIONS.map(({id, label}) => (
-                        <button onClick={() => setView(id)}
-                                className={`px-4 py-2 ${
-                                    id === view
-                                        ? "bg-purple-main text-white" : "bg-transparent text-black hover:bg-gray-200"
-                                }`}>
-                            {label}</button>
-                    ))}
+                    <button className="px-4 py-2 bg-purple-main text-white"
+                            onClick={onTodayClick}>Сегодня
+                    </button>
                 </div>
             </div>
             <div className="h-full overflow-y-auto">
                 <Calendar
                     localizer={localizer}
                     defaultView={Views.MONTH}
-                    // defaultDate={date}
                     events={getEventsFromLessons(lessons)}
                     culture={"ru"}
                     messages={messages}
@@ -125,6 +125,7 @@ export function LessonCalendar({date, setDate}) {
                     components={{
                         month: {event: CalendarEvent}
                     }}
+                    showAllEvents={true}
                 />
             </div>
         </div>

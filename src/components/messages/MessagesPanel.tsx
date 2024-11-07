@@ -6,7 +6,6 @@ import NewMessageIcon from "@/components/icons/NewMessageIcon";
 import {Suspense, useEffect, useRef, useState} from "react";
 import ChatListLoading from "@/components/messages/ChatListLoading";
 import NewChat from "@/components/messages/NewChat";
-import ErrorBoundary from "@/components/error/ErrorBoundary";
 
 export function MessagesPanel() {
     const [isCreatingChat, setIsCreatingChat] = useState<boolean>(false)
@@ -18,7 +17,7 @@ export function MessagesPanel() {
     useEffect(() => {
         // Устанавливаем WebSocket соединение
 
-        socket.current = new WebSocket('ws://localhost:8080/ws')
+        socket.current = new WebSocket(`${process.env.NEXT_PUBLIC_BACKEND_URL}/ws`)
         socket.current.onopen = () => {
             console.log("Connected")
         }

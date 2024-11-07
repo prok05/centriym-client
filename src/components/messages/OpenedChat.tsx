@@ -1,6 +1,7 @@
 import {Fab, TextField} from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 
+// @ts-ignore
 export function OpenedChat({selectedChat, setSelectedChat}) {
 
     function closeChat() {

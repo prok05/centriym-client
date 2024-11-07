@@ -8,7 +8,7 @@ import {LessonItem} from "@/components/lessons/LessonItem";
 import {useLessonStore} from "@/store/lessonStore";
 import {getEventsFromLessons, getStartAndEndDate} from "@/utils/utils";
 import {LessonCalendar} from "@/components/lessons/LessonCalendar";
-import {Views} from "react-big-calendar";
+import {useQuery} from "@tanstack/react-query";
 
 
 export function LessonList() {
@@ -17,6 +17,28 @@ export function LessonList() {
     const setLessons = useLessonStore((state) => state.setLessons);
 
     const [date, setDate] = useState<Date>(moment().toDate());
+
+    // const getLessons = (id, start, end) => {
+    //     fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/lessons/future`, {
+    //         method: "POST",
+    //         body: JSON.stringify({
+    //             "customer_id": userID,
+    //             "date_from": start,
+    //             "date_to": end,
+    //             "page": 0
+    //         })
+    //     })
+    //         .then(res => res.json())
+    //         .then((data) => {
+    //
+    //         })
+    //
+    // }
+
+    // const {isPending, error, data} = useQuery({
+    //     queryKey: ['lessons'],
+    //     queryFn:
+    // })
 
 
     useEffect(() => {

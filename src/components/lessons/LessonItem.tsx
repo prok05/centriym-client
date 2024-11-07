@@ -1,7 +1,8 @@
 'use client'
 
-import LessonI from "@/lib/types";
+import {LessonI} from "@/lib/types";
 import {Card, CardContent, Typography} from "@mui/material";
+
 
 interface Props {
     lesson: LessonI

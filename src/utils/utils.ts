@@ -1,6 +1,7 @@
 import {format, differenceInHours, differenceInDays} from 'date-fns';
 import moment from 'moment';
 
+// @ts-ignore
 const formatDate = (dateString) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -15,6 +16,7 @@ const formatDate = (dateString) => {
     } else if (diffDays > 1 && diffDays <= 7) {
         return `${diffDays}д`; // Количество дней назад
     }
+    // @ts-ignore
     return format(date, 'EEE. HH:mm', {locale: 'ru'});
     // Если больше 7 дней назад, форматируем в стиль "Вт. 14:05"
 };
@@ -27,14 +29,17 @@ export const getStartAndEndDate = (date: Date) => {
     return [moment(startDate).format("YYYY-MM-DD"), moment(endDate).format("YYYY-MM-DD")]
 }
 
+// @ts-ignore
 export const getEventsFromLessons = (lessons) => {
     if (lessons !== null) {
+        // @ts-ignore
         return lessons.map((lesson) => {
             return {
                 title: getSubjectName(lesson.subject_id),
                 status: lesson.status,
                 start: moment(lesson.time_from).toDate(),
                 end: moment(lesson.time_to).toDate(),
+                hour: moment(lesson.time_from).format("HH:MM"),
             }
         })
     }

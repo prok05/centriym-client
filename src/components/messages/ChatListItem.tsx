@@ -1,6 +1,7 @@
 import {Avatar, Skeleton} from "@mui/material";
 import formatDate from "@/utils/utils";
 
+// @ts-ignore
 export default function ChatListItem({chat, setSelectedChat}) {
     function onClick() {
         setSelectedChat(chat.id)

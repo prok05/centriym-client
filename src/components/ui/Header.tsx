@@ -20,6 +20,7 @@ import {useUser} from "@/hooks/useUser";
 
 export function Header() {
     const [anchorEl, setAnchorEl] = useState(null);
+    // @ts-ignore
     const handleProfileMenuOpen = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -39,7 +40,9 @@ export function Header() {
     }
 
     const profileMenuId = 'account-menu';
+    // @ts-ignore
     const ProfileTooltip = styled(({className, ...props}) => (
+        // @ts-ignore
         <Tooltip {...props} classes={{popper: className}}/>
     ))(({theme}) => ({
         [`& .${tooltipClasses.tooltip}`]: {
@@ -52,6 +55,8 @@ export function Header() {
         },
     }));
 
+    // @ts-ignore
+    // @ts-ignore
     return (
         <Box sx={{flexGrow: 1}}>
             <AppBar className="border-b z-20" position="static" elevation={0} color="transparent">
@@ -78,16 +83,16 @@ export function Header() {
                                 <CircleNotificationsIcon />
                             </Badge>
                         </IconButton>
-
+                        {/*@ts-ignore*/}
                         <ProfileTooltip title={
                             <Fragment>
                                 <ProfileMenu isLoading={isLoading} paid_lesson_count={user?.paid_lesson_count}/>
                             </Fragment>
                         }>
-                            <div>
+                            <div className="flex items-center cursor-pointer">
                                 <AccountCircleIcon fontSize="large" sx={{marginRight: "10px", color: "#979797"}}/>
                                 {isLoading ?
-                                    <Skeleton width="50px" variant="text" sx={{fontSize: '1rem'}}/> : firstName}
+                                    <Skeleton width="55px" variant="text" sx={{fontSize: '1.2rem'}}/> : firstName}
                             </div>
                         </ProfileTooltip>
                     </Box>

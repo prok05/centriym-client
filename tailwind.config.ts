@@ -16,6 +16,7 @@ const config: Config = {
       colors: {
         "purple-main": "#702DFF",
         "purple-sec": "rgba(112, 45, 255, 0.2)",
+        "purple-pale": "rgba(112,45,255,0.08)",
         "white": "#ffffff",
         "grey-100": "#202020"
       }
