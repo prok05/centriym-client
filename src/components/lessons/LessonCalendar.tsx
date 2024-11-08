@@ -1,7 +1,7 @@
 import moment from 'moment'
 import {Calendar, momentLocalizer, Event, Views} from 'react-big-calendar'
 import 'moment/locale/ru'
-import {useCallback, useMemo, useState} from "react";
+import {SetStateAction, useCallback, useMemo, useState} from "react";
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import HelpIcon from '@mui/icons-material/Help';
@@ -11,14 +11,15 @@ import {getEventsFromLessons} from "@/utils/utils";
 import {useLessonStore} from "@/store/lessonStore";
 import {CalendarEvent} from "@/components/lessons/CalendarEvent";
 
+
 const localizer = momentLocalizer(moment)
 moment.locale("ru");
 type Keys = keyof typeof Views;
 
 const VIEW_OPTIONS = [
-    { id: Views.MONTH, label: "Месяц" },
-    { id: Views.WEEK, label: "Неделя" },
-    { id: Views.DAY, label: "День" },
+    {id: Views.MONTH, label: "Месяц"},
+    {id: Views.WEEK, label: "Неделя"},
+    {id: Views.DAY, label: "День"},
 ];
 
 // @ts-ignore
@@ -77,6 +78,12 @@ export function LessonCalendar({date, setDate}) {
         setDate(moment().toDate());
     }, []);
 
+    const [selected, setSelected] = useState();
+    const handleSelected = (event: SetStateAction<undefined>) => {
+        setSelected(event);
+        console.info('[handleSelected - event]', event);
+    };
+
     return (
         <div className="h-full flex flex-col">
             <div className="flex justify-between p-1">
@@ -92,28 +99,20 @@ export function LessonCalendar({date, setDate}) {
                         color: "#959595"
                     }}/></button>
                 </div>
-
-                {/*<div>*/}
-                {/*    {VIEW_OPTIONS.map(({id, label}) => (*/}
-                {/*        <button onClick={() => setView(id)}*/}
-                {/*                className={`px-4 py-2 ${*/}
-                {/*                    id === view*/}
-                {/*                        ? "bg-purple-main text-white" : "bg-transparent text-black hover:bg-gray-200"*/}
-                {/*                }`}>*/}
-                {/*            {label}</button>*/}
-                {/*    ))}*/}
-                {/*</div>*/}
                 <div>
                     <button className="px-4 py-2 bg-purple-main text-white"
                             onClick={onTodayClick}>Сегодня
                     </button>
                 </div>
             </div>
+
             <div className="h-full overflow-y-auto">
                 <Calendar
                     localizer={localizer}
                     defaultView={Views.MONTH}
                     events={getEventsFromLessons(lessons)}
+                    selected={selected}
+                    // onSelectEvent={handleSelected}
                     culture={"ru"}
                     messages={messages}
                     startAccessor="start"

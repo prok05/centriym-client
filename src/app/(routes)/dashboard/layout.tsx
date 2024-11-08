@@ -6,10 +6,14 @@ import {useUserID} from "@/hooks/useUserID";
 import {useInnerUserStore} from "@/store/innerUserStore";
 import {useEffect} from "react";
 import {Header} from "@/components/ui/Header";
+import {QueryClientProvider, QueryClient} from "@tanstack/react-query";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
+const queryClient = new QueryClient()
 
 export default function DashboardLayout({
-    children, // will be a page or nested layout
-        }: {
+                                            children, // will be a page or nested layout
+                                        }: {
     children: React.ReactNode
 }) {
     const userID = useUserID()
@@ -33,18 +37,22 @@ export default function DashboardLayout({
     }, [userID, innerUser, setInnerUser]);
 
     return (
-        <div className="flex flex-col h-screen">
-            <div className="flex-shrink-0">
-                <Header/>
-            </div>
-            <section className="flex-1 overflow-y-auto">
-                <div className="flex h-full">
-                    <NavigationPanel/>
-                    <div className="bg-gray-50 p-5 overflow-hidden w-10/12 z-1">
-                        {children}
-                    </div>
+        <QueryClientProvider client={queryClient}>
+            <div className="flex flex-col h-screen">
+                <div className="flex-shrink-0">
+                    <Header/>
                 </div>
-            </section>
-        </div>
+                <section className="flex-1 overflow-y-auto">
+                    <div className="flex h-full">
+                        <NavigationPanel/>
+                        <div className="bg-gray-50 p-5 overflow-hidden w-10/12 z-1">
+                            {children}
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+
     )
 }

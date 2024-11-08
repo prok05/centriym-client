@@ -36,10 +36,14 @@ export const getEventsFromLessons = (lessons) => {
         return lessons.map((lesson) => {
             return {
                 title: getSubjectName(lesson.subject_id),
+                topic: lesson.topic,
+                note: lesson.note,
                 status: lesson.status,
+                streaming: lesson.streaming,
                 start: moment(lesson.time_from).toDate(),
                 end: moment(lesson.time_to).toDate(),
-                hour: moment(lesson.time_from).format("HH:MM"),
+                hourStart: moment(lesson.time_from).format("HH:mm"),
+                hourEnd: moment(lesson.time_to).format("HH:mm"),
             }
         })
     }

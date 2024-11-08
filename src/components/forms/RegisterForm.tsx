@@ -13,6 +13,7 @@ import InputLabel from "@mui/material/InputLabel";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { MuiTelInput } from 'mui-tel-input'
+import {router} from "next/client";
 
 export default function RegisterForm() {
     const [phone, setPhone] = useState();
@@ -70,6 +71,12 @@ export default function RegisterForm() {
                 "password": password,
                 "role": formData.get("role"),
             }
+            const dataLOG = {
+                "phone": phone,
+                "password": password,
+            }
+
+
 
             console.log(data)
 
@@ -81,6 +88,7 @@ export default function RegisterForm() {
                 body: JSON.stringify(data),
             })
 
+
             // const dataResp = await response.json()
             switch (response.status) {
                 case 404:
@@ -88,7 +96,20 @@ export default function RegisterForm() {
                 case 409:
                     throw new Error("Пользователь с таким номера телефона уже зарегистрирован.")
                 case 201:
+                {
                     setIsRegisterOk(true)
+                    await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/login`, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        method: "POST",
+                        body: JSON.stringify(dataLOG),
+                        credentials: "include"
+                    })
+                    router.push("/dashboard")
+                }
+
+
             }
         } catch (error) {
             // @ts-ignore
@@ -104,7 +125,7 @@ export default function RegisterForm() {
             {isRegisterOk ?
                 <div className="px-6 py-4 mx-auto w-full max-w-sm rounded-3xl flex flex-col items-center">
                     <Alert severity="success">Поздравляем с успешной регистрацией на платформе! Теперь Вы можете авторизироваться.</Alert>
-                    <Link className="w-auto mt-4 text-white bg-purple-main rounded-xl py-2 px-9" href="/login">Войти</Link>
+                    <Link className="w-auto mt-4 text-white bg-purple-main rounded-xl py-2 px-9" href="/dashboard">Войти</Link>
                 </div>
                 :
                 <form className="rounded px-8 pt-6 pb-8 mb-4" onSubmit={onSubmit}>

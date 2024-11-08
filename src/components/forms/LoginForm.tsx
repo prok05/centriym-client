@@ -107,7 +107,7 @@ export default function LoginForm() {
                         label="Телефон"
                         fullWidth
                         name="phone"
-                        defaultCountry="RU"
+                        //defaultCountry="RU"
                         disableDropdown
                         onChange={handlePhoneChange}
                         value={phone}
