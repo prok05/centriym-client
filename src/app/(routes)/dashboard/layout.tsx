@@ -9,7 +9,9 @@ import {Header} from "@/components/ui/Header";
 import {QueryClientProvider, QueryClient} from "@tanstack/react-query";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+
+})
 
 export default function DashboardLayout({
                                             children, // will be a page or nested layout

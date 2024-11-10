@@ -10,6 +10,10 @@ import './calendar.css'
 import {getEventsFromLessons} from "@/utils/utils";
 import {useLessonStore} from "@/store/lessonStore";
 import {CalendarEvent} from "@/components/lessons/CalendarEvent";
+import CircularProgress from '@mui/material/CircularProgress';
+import {LinearProgress} from "@mui/material";
+import LessonHelpTooltip from "@/components/lessons/LessonHelpTooltip";
+import React from 'react';
 
 
 const localizer = momentLocalizer(moment)
@@ -23,9 +27,9 @@ const VIEW_OPTIONS = [
 ];
 
 // @ts-ignore
-export function LessonCalendar({date, setDate}) {
+export function LessonCalendar({date, setDate, data, isPlaceholderData, isPending}) {
     const [view, setView] = useState<(typeof Views)[Keys]>(Views.MONTH);
-    const lessons = useLessonStore((state) => state.lessons);
+    // const lessons = useLessonStore((state) => state.lessons);
 
     const {defaultDate, messages} = useMemo(
         () => ({
@@ -86,33 +90,46 @@ export function LessonCalendar({date, setDate}) {
 
     return (
         <div className="h-full flex flex-col">
-            <div className="flex justify-between p-1">
+            <div className="relative">
+                <div className="flex justify-between p-1">
+                    <div className="flex items-center mx-auto">
+                        <button className="mr-6" onClick={onPrevClick}><NavigateBeforeIcon fontSize="large"/></button>
+                        <div className="bg-[#702DFF14] py-2 px-4 rounded-xl">
+                            <span>{dateText}</span>
+                        </div>
+                        <button className="ml-6" onClick={onNextClick}><NavigateNextIcon fontSize="large"/></button>
 
-                <div className="flex items-center">
-                    <button className="mr-6" onClick={onPrevClick}><NavigateBeforeIcon fontSize="large"/></button>
-                    <div className="bg-[#702DFF14] py-2 px-4 rounded-xl">
-                        <span>{dateText}</span>
+                        <LessonHelpTooltip title={
+                            <React.Fragment>
+                                <div className="flex flex-col">
+                                    <div className="bg-gray-200 p-2">Прошедший урок</div>
+                                    <div className="bg-red-200 p-2">Отмененный урок</div>
+                                    <div className="bg-green-200 p-2">Запланированный урок</div>
+                                </div>
+                            </React.Fragment>
+                        }>
+                            <button className="ml-6"><HelpIcon sx={{
+                                color: "#959595"
+                            }}/></button>
+                        </LessonHelpTooltip>
+
                     </div>
-                    <button className="ml-6" onClick={onNextClick}><NavigateNextIcon fontSize="large"/></button>
-
-                    <button className="ml-6"><HelpIcon sx={{
-                        color: "#959595"
-                    }}/></button>
+                    <div>
+                        <button className="px-4 py-2 bg-purple-main text-white"
+                                onClick={onTodayClick}>Сегодня
+                        </button>
+                    </div>
                 </div>
-                <div>
-                    <button className="px-4 py-2 bg-purple-main text-white"
-                            onClick={onTodayClick}>Сегодня
-                    </button>
-                </div>
+                {isPending && <div className="absolute w-full"><LinearProgress color="secondary"/></div>}
             </div>
+            <div className={"h-full overflow-y-auto relative" +
+                (isPlaceholderData ? " opacity-30" : "") + (isPending ? " opacity-30" : "")}>
 
-            <div className="h-full overflow-y-auto">
                 <Calendar
                     localizer={localizer}
                     defaultView={Views.MONTH}
-                    events={getEventsFromLessons(lessons)}
+                    events={data ? getEventsFromLessons(data.items) : []}
                     selected={selected}
-                    // onSelectEvent={handleSelected}
                     culture={"ru"}
                     messages={messages}
                     startAccessor="start"

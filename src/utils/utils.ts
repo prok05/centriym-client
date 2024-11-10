@@ -31,7 +31,7 @@ export const getStartAndEndDate = (date: Date) => {
 
 // @ts-ignore
 export const getEventsFromLessons = (lessons) => {
-    if (lessons !== null) {
+    if (lessons != null) {
         // @ts-ignore
         return lessons.map((lesson) => {
             return {

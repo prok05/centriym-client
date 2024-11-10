@@ -104,6 +104,10 @@ export function CalendarEvent({event}) {
                     <Typography gutterBottom>
                         <b>Комментарий к уроку</b>: {event.note ? <i>{event.note}</i> : "—"}
                     </Typography>
+                    {event.status === 3 &&
+                        <Typography gutterBottom>
+                            <b>Оценить урок</b>
+                        </Typography>}
                 </DialogContent>
                 <DialogActions>
                     <EnterLessonBtn/>

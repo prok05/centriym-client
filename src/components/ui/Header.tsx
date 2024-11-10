@@ -1,7 +1,6 @@
 "use client"
 
 import {SmallLogo} from "@/components/ui/SmallLogo";
-import Link from 'next/link';
 import Box from "@mui/material/Box";
 import {AppBar, IconButton, Skeleton, Toolbar} from "@mui/material";
 import Tooltip, {tooltipClasses} from '@mui/material/Tooltip';
@@ -13,7 +12,6 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import {styled} from '@mui/material/styles';
 import {Fragment, useState} from "react";
 import {SxProps} from "@mui/system";
-import Menu from '@mui/material/Menu';
 import {ProfileMenu} from "@/components/ui/ProfileMenu";
 import {useUser} from "@/hooks/useUser";
 
