@@ -40,6 +40,7 @@ export const getEventsFromLessons = (lessons) => {
                 note: lesson.note,
                 status: lesson.status,
                 streaming: lesson.streaming,
+                homework: lesson.homework,
                 start: moment(lesson.time_from).toDate(),
                 end: moment(lesson.time_to).toDate(),
                 hourStart: moment(lesson.time_from).format("HH:mm"),

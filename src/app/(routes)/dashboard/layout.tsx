@@ -8,9 +8,17 @@ import {useEffect} from "react";
 import {Header} from "@/components/ui/Header";
 import {QueryClientProvider, QueryClient} from "@tanstack/react-query";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import moment from 'moment';
+import 'moment/locale/ru'
+
+moment.locale("ru")
 
 const queryClient = new QueryClient({
-
+    defaultOptions: {
+        queries: {
+            staleTime: 3 * 60 * 1000
+        }
+    }
 })
 
 export default function DashboardLayout({

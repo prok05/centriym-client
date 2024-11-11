@@ -1,9 +1,7 @@
 'use client'
 
-import Input from "@/components/ui/Input";
 import {LoginRegisterButtons} from "@/components/forms/LoginRegisterButtons";
 import {SelectRole} from "@/components/forms/SelectRole";
-import PhoneInput from "react-phone-number-input/input";
 import {FormEvent, useState} from "react";
 import Link from "next/link";
 import {Alert, Button, FormHelperText, IconButton, InputAdornment, OutlinedInput, TextField} from "@mui/material";

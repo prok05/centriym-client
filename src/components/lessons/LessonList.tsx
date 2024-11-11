@@ -2,11 +2,9 @@
 
 import {useUserID} from "@/hooks/useUserID";
 import moment from 'moment'
-import {LessonI} from "@/lib/types";
-import {useEffect, useState} from "react";
-import {LessonItem} from "@/components/lessons/LessonItem";
+import {useState} from "react";
 import {useLessonStore} from "@/store/lessonStore";
-import {getEventsFromLessons, getStartAndEndDate} from "@/utils/utils";
+import { getStartAndEndDate} from "@/utils/utils";
 import {LessonCalendar} from "@/components/lessons/LessonCalendar";
 import {keepPreviousData, useQuery} from "@tanstack/react-query";
 
@@ -18,6 +16,7 @@ export function LessonList() {
 
     const [date, setDate] = useState<Date>(moment().toDate());
 
+    // @ts-ignore
     const getLessons = async (id, date) => {
         let [start, end] = getStartAndEndDate(date)
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/lessons/future`, {
@@ -42,32 +41,6 @@ export function LessonList() {
         enabled: !!userID,
         placeholderData: keepPreviousData
     })
-
-
-    // useEffect(() => {
-    //     // if (lessons) return;
-    //
-    //     if (userID && date) {
-    //         let [start, end] = getStartAndEndDate(date)
-    //         console.log("Получаем за", moment(date).month())
-    //
-    //         fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/lessons/future`, {
-    //             method: "POST",
-    //             body: JSON.stringify({
-    //                 "customer_id": userID,
-    //                 "date_from": start,
-    //                 "date_to": end,
-    //                 "page": 0
-    //             })
-    //         })
-    //             .then(response => response.json())
-    //             .then((data) => {
-    //                 setLessons(data.items)
-    //                 console.log(data.items)
-    //             })
-    //     }
-    //
-    // }, [userID, setLessons, date]);
 
     return (
         <div className="flex flex-col h-full">

@@ -8,9 +8,7 @@ import HelpIcon from '@mui/icons-material/Help';
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import './calendar.css'
 import {getEventsFromLessons} from "@/utils/utils";
-import {useLessonStore} from "@/store/lessonStore";
 import {CalendarEvent} from "@/components/lessons/CalendarEvent";
-import CircularProgress from '@mui/material/CircularProgress';
 import {LinearProgress} from "@mui/material";
 import LessonHelpTooltip from "@/components/lessons/LessonHelpTooltip";
 import React from 'react';
