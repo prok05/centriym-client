@@ -11,7 +11,7 @@ import InputLabel from "@mui/material/InputLabel";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { MuiTelInput } from 'mui-tel-input'
-import {router} from "next/client";
+import { useRouter } from 'next/navigation'
 
 export default function RegisterForm() {
     const [phone, setPhone] = useState();
@@ -23,6 +23,8 @@ export default function RegisterForm() {
     const [error, setError] = useState<string | null>(null);
     const [showPassword, setShowPassword] = useState(false);
     const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+
+    const router = useRouter()
 
     const handlePasswordChange = (e:any) => {
         setPassword(e.target.value);
