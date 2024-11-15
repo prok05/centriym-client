@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import Button, {ButtonProps} from '@mui/material/Button';
 import {useRouter} from 'next/navigation'
 import LoginIcon from '@mui/icons-material/Login';
+import Rating from '@mui/material/Rating';
 
 moment.locale("ru");
 
@@ -105,9 +106,12 @@ export function CalendarEvent({event}) {
                         <b>Комментарий к уроку</b>: {event.note ? <i>{event.note}</i> : "—"}
                     </Typography>
                     {event.status === 3 &&
-                        <Typography gutterBottom>
-                            <b>Оценить урок</b>
-                        </Typography>}
+                        <div className="mt-2">
+                            <Typography gutterBottom>
+                                <b>Оценить урок</b> <Rating name="size-medium" defaultValue={2}/>
+                            </Typography>
+                        </div>
+                    }
                 </DialogContent>
                 <DialogActions>
                     <EnterLessonBtn/>
