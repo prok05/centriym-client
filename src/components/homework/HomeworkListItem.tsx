@@ -96,7 +96,7 @@ function HomeworkListItem({item}) {
                     {/*    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded"*/}
                     {/*>Сдать*/}
                     {/*</button>*/}
-                    <UploadHomeworkBtn />
+                    <UploadHomeworkBtn lesson={item} />
                 </DialogActions>
             </BootstrapDialog>
         </React.Fragment>
