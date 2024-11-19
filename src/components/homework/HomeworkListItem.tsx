@@ -1,5 +1,5 @@
 import React from 'react';
-import {Divider, Typography} from "@mui/material";
+import {Button, Divider, Typography} from "@mui/material";
 import {getSubjectName} from "@/utils/utils";
 import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
@@ -11,6 +11,7 @@ import Dialog from "@mui/material/Dialog";
 import moment from 'moment'
 import Chip from '@mui/material/Chip';
 import UploadHomeworkBtn from "@/components/homework/UploadHomeworkBtn";
+import {grey} from "@mui/material/colors"
 
 const BootstrapDialog = styled(Dialog)(({theme}) => ({
     '& .MuiDialogContent-root': {
@@ -31,9 +32,9 @@ function HomeworkListItem({item}) {
         setOpen(false);
     };
 
-    function HomeworkStatus(status) {
+    function HomeworkStatus(status: string) {
         if (status === "3") {
-            return <Chip color="warning" label={"Не сдано"} />
+            return <Chip label={"Не сдано"} sx={{bgcolor: grey}}  />
         } else if (status === "2") {
             return <Chip color="info" label={"На проверке"} />
         } else if (status === "1") {
@@ -53,11 +54,13 @@ function HomeworkListItem({item}) {
                 </div>
                 <div>{HomeworkStatus(item.custom_homework_status)}</div>
                 <div>
-                    <button
+                    <Button
                         onClick={handleClickOpen}
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded"
+                        variant="contained"
+                        size="small"
+                        sx={{bgcolor: "#702DFF", fontWeight: "bolder"}}
                     >Открыть
-                    </button>
+                    </Button>
                 </div>
                 <div>
 
@@ -92,10 +95,6 @@ function HomeworkListItem({item}) {
                     </Typography>
                 </DialogContent>
                 <DialogActions>
-                    {/*<button*/}
-                    {/*    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded"*/}
-                    {/*>Сдать*/}
-                    {/*</button>*/}
                     <UploadHomeworkBtn lesson={item} />
                 </DialogActions>
             </BootstrapDialog>

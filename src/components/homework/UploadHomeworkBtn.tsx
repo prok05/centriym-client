@@ -4,6 +4,8 @@ import Button from '@mui/material/Button';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Alert from '@mui/material/Alert';
 import {useUserID} from "@/hooks/useUserID";
+import { useQueryClient } from '@tanstack/react-query';
+
 
 const VisuallyHiddenInput = styled('input')({
     clip: 'rect(0 0 0 0)',
@@ -19,19 +21,22 @@ const VisuallyHiddenInput = styled('input')({
 
 function UploadHomeworkBtn({lesson}) {
     const userID = useUserID()
-    const [selectedFile, setSelectedFile] = useState();
+    const [selectedFile, setSelectedFile] = useState<File | undefined>();
+    const [uploaded, setUploaded] = useState<boolean>(false)
     const [error, setError] = useState<String>();
+
+    const queryClient = useQueryClient();
 
     const uploadFile = (event) => {
         const file = event.target.files[0];
-
-        if (file.size > 52428800) {
-            setError("Размер файла не должен превышать 50 мегабайт.")
-            return
+        if (file) {
+            if (file.size > 52428800) {
+                setError("Размер файла не должен превышать 50 мегабайт.")
+                return
+            }
+            setSelectedFile(file)
+            setError("")
         }
-
-        setSelectedFile(file)
-        setError("")
     }
 
     const uploadHomework = async () => {
@@ -47,35 +52,60 @@ function UploadHomeworkBtn({lesson}) {
 
         const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/upload/homework`,
             {
-            method: "POST",
-            body: formData,
-            credentials: "include"
-        })
+                method: "POST",
+                body: formData,
+                credentials: "include"
+            })
 
-        // const data = await res.json()
+        if (res.status === 201) {
+            await queryClient.invalidateQueries(['homework']);
+            setUploaded(true)
+        }
     }
 
     return (
-        <div>
-            <Button
-                component="label"
-                role={undefined}
-                variant="contained"
-                tabIndex={-1}
-                startIcon={<CloudUploadIcon />}
-            >
-                Загрузить ДЗ
-                <VisuallyHiddenInput
-                    type="file"
-                    onChange={uploadFile}
-                    accept={"image/*,.png,.jpg,.doc,.docx,.pptx,.ppt,.rar,.zip"}
-                />
-            </Button>
-            <Button onClick={uploadHomework}>Отправить</Button>
-            {selectedFile && <div>{selectedFile.name} {selectedFile.size}</div>}
-            {error && <Alert severity="error">{error}</Alert>}
-        </div>
+        <div className="w-full">
+            {uploaded ?
+                <div className="p-2">
+                <Alert severity="success">Домашнее задание успешно загружено!</Alert>
+                </div>
+                :
+                <div className="flex justify-between items-center mb-2 p-2">
+                    <Button
+                        component="label"
+                        role={undefined}
+                        variant="contained"
+                        tabIndex={-1}
+                        startIcon={<CloudUploadIcon/>}
+                        sx={{
+                            bgcolor: "#702DFF"
+                        }}
+                    >
+                        Загрузить ДЗ
+                        <VisuallyHiddenInput
+                            type="file"
+                            onChange={uploadFile}
+                            accept={"image/*,.png,.jpg,.doc,.docx,.pptx,.ppt,.rar,.zip"}
+                        />
+                    </Button>
+                    {selectedFile &&
+                        <div className="flex flex-col items-center">
+                            <div>Загруженный файл:</div>
+                            <div>{selectedFile.name}</div>
+                        </div>
+                    }
+                    <Button
+                        variant="contained"
+                        disabled={!selectedFile}
+                        sx={{
+                            bgcolor: "#702DFF"
+                        }}
+                        onClick={uploadHomework}>Отправить</Button>
+                </div>
+            }
 
+            <div>{error && <Alert severity="error">{error}</Alert>}</div>
+        </div>
     );
 }
 
