@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button, Divider, Typography} from "@mui/material";
-import {getSubjectName} from "@/utils/utils";
+import {getStartAndEndDate, getSubjectName} from "@/utils/utils";
 import DialogTitle from "@mui/material/DialogTitle";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
@@ -12,6 +12,8 @@ import moment from 'moment'
 import Chip from '@mui/material/Chip';
 import UploadHomeworkBtn from "@/components/homework/UploadHomeworkBtn";
 import {grey} from "@mui/material/colors"
+import {useQuery} from "@tanstack/react-query";
+import LoadedFilesList from "@/components/homework/LoadedFilesList";
 
 const BootstrapDialog = styled(Dialog)(({theme}) => ({
     '& .MuiDialogContent-root': {
@@ -32,12 +34,12 @@ function HomeworkListItem({item}) {
         setOpen(false);
     };
 
-    function HomeworkStatus(status: string) {
-        if (status === "3") {
+    function HomeworkStatus(status: number) {
+        if (status === 3) {
             return <Chip label={"Не сдано"} sx={{bgcolor: grey}}  />
-        } else if (status === "2") {
+        } else if (status === 2) {
             return <Chip color="info" label={"На проверке"} />
-        } else if (status === "1") {
+        } else if (status === 1) {
             return <Chip color="success" label={"Сдано"} />
         }
     }
@@ -52,7 +54,7 @@ function HomeworkListItem({item}) {
                     <Divider sx={{mb: 1}} />
                     <Typography variant="body1">Тема: {item.topic}</Typography>
                 </div>
-                <div>{HomeworkStatus(item.custom_homework_status)}</div>
+                <div>{HomeworkStatus(item.homework_status)}</div>
                 <div>
                     <Button
                         onClick={handleClickOpen}
@@ -94,6 +96,13 @@ function HomeworkListItem({item}) {
                         {item.homework}
                     </Typography>
                 </DialogContent>
+                {item.homework_id && <DialogContent dividers>
+                    <Typography gutterBottom>
+                        <b>Загруженные файлы</b>
+                        <LoadedFilesList homeworkID={item.homework_id} />
+                    </Typography>
+                </DialogContent>}
+
                 <DialogActions>
                     <UploadHomeworkBtn lesson={item} />
                 </DialogActions>

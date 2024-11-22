@@ -39,7 +39,7 @@ const HomeworkListStudent = () => {
     const getLessonsWithHomeWork = async (userID, date) => {
         let [start, end] = getStartAndEndDate(date)
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/lessons/future`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/lessons/homework/student`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -79,10 +79,11 @@ const HomeworkListStudent = () => {
         return <div>Не удалось загрузить домашние задания</div>
     }
 
-
+    console.log(data)
     return (
         <div className="flex flex-col h-full">
             <div className="h-full">
+
                 <Stack spacing={3}>
                     {/*@ts-ignore*/}
                     {data.map((item) => (

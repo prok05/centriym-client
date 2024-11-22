@@ -63,6 +63,28 @@ function UploadHomeworkBtn({lesson}) {
         }
     }
 
+    const addHomework = async () => {
+        if (!selectedFile) {
+            setError("Загрузите файл.")
+        }
+
+        const formData = new FormData()
+        formData.append('file', selectedFile)
+        formData.append('homework_id', lesson.homework_id)
+
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/upload/homework-add`,
+            {
+                method: "POST",
+                body: formData,
+                credentials: "include"
+            })
+
+        if (res.status === 201) {
+            await queryClient.invalidateQueries(['homework']);
+            setUploaded(true)
+        }
+    }
+
     return (
         <div className="w-full">
             {uploaded ?
@@ -81,7 +103,7 @@ function UploadHomeworkBtn({lesson}) {
                             bgcolor: "#702DFF"
                         }}
                     >
-                        Загрузить ДЗ
+                        {lesson.homework_id ? 'Догрузить ДЗ' : 'Загрузить ДЗ'}
                         <VisuallyHiddenInput
                             type="file"
                             onChange={uploadFile}
@@ -100,7 +122,7 @@ function UploadHomeworkBtn({lesson}) {
                         sx={{
                             bgcolor: "#702DFF"
                         }}
-                        onClick={uploadHomework}>Отправить</Button>
+                        onClick={lesson.homework_id ? addHomework : uploadHomework}>Отправить</Button>
                 </div>
             }
 

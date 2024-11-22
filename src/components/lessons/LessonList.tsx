@@ -19,7 +19,7 @@ export function LessonList() {
     // @ts-ignore
     const getLessons = async (id, date) => {
         let [start, end] = getStartAndEndDate(date)
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/lessons/future`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/lessons/student`, {
             method: "POST",
             body: JSON.stringify({
                 "customer_id": userID,
