@@ -6,8 +6,7 @@ function LoadedFilesList({homeworkID}) {
 
     const {data, error, isPending, refetch} = useQuery({
         queryKey: ['homework-files', homeworkID],
-        queryFn: () => getHomeworkFiles(homeworkID),
-        initialData: []
+        queryFn: () => getHomeworkFiles(homeworkID)
     })
 
     // @ts-ignore
@@ -63,6 +62,7 @@ function LoadedFilesList({homeworkID}) {
             method: "DELETE"
         });
         if (response.status == 200) {
+
             await queryClient.invalidateQueries(['homework-files', homeworkID]);
         }
     }
@@ -71,27 +71,43 @@ function LoadedFilesList({homeworkID}) {
         return <div>Загрузка</div>
     }
 
+    console.log(data)
+    console.log(homeworkID)
+
     return (
         <div>
-            {data && <div>{data.map((el) => (
-                <div key={el.id} className="p-2 mt-2 border-2 rounded flex justify-between items-center">
-                    Файл
-                    <div>
-                        <Button sx={{bgcolor: "#702DFF", marginRight: "10px"}}
+            {data.length ? (
+                data.map((el) => (
+                    <div
+                        key={el.id}
+                        className="p-2 mt-2 border-2 rounded flex justify-between items-center"
+                    >
+                        Файл {el.id}
+                        <div>
+                            <Button
+                                sx={{ bgcolor: "#702DFF", marginRight: "10px" }}
                                 size="small"
                                 variant="contained"
                                 onClick={() => handleDownLoadFile(el.id)}
-                        >Скачать</Button>
-                        <Button sx={{bgcolor: "#ff2d5e"}}
+                            >
+                                Скачать
+                            </Button>
+                            <Button
+                                sx={{ bgcolor: "#ff2d5e" }}
                                 size="small"
                                 variant="contained"
                                 onClick={() => handleDeleteFile(el.id)}
-                        >Удалить</Button>
+                            >
+                                Удалить
+                            </Button>
+                        </div>
                     </div>
+                ))
+            ) : (
+                <div className="p-4 text-center text-gray-500">
+                    Файлы отсутствуют.
                 </div>
-            ))}
-            </div>
-            }
+            )}
         </div>
     )
         ;

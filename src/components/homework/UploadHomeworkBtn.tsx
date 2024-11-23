@@ -21,7 +21,7 @@ const VisuallyHiddenInput = styled('input')({
 
 function UploadHomeworkBtn({lesson}) {
     const userID = useUserID()
-    const [selectedFile, setSelectedFile] = useState<File | undefined>();
+    const [selectedFile, setSelectedFile] = useState<File | null>();
     const [uploaded, setUploaded] = useState<boolean>(false)
     const [error, setError] = useState<String>();
 
@@ -59,6 +59,7 @@ function UploadHomeworkBtn({lesson}) {
 
         if (res.status === 201) {
             await queryClient.invalidateQueries(['homework']);
+            setSelectedFile(null)
             setUploaded(true)
         }
     }
@@ -80,6 +81,7 @@ function UploadHomeworkBtn({lesson}) {
             })
 
         if (res.status === 201) {
+            setSelectedFile(null)
             await queryClient.invalidateQueries(['homework']);
             setUploaded(true)
         }
@@ -87,11 +89,6 @@ function UploadHomeworkBtn({lesson}) {
 
     return (
         <div className="w-full">
-            {uploaded ?
-                <div className="p-2">
-                <Alert severity="success">Домашнее задание успешно загружено!</Alert>
-                </div>
-                :
                 <div className="flex justify-between items-center mb-2 p-2">
                     <Button
                         component="label"
@@ -103,7 +100,7 @@ function UploadHomeworkBtn({lesson}) {
                             bgcolor: "#702DFF"
                         }}
                     >
-                        {lesson.homework_id ? 'Догрузить ДЗ' : 'Загрузить ДЗ'}
+                        {lesson.homework_status === 3 ? 'Загрузить ДЗ' : 'Догрузить ДЗ'}
                         <VisuallyHiddenInput
                             type="file"
                             onChange={uploadFile}
@@ -122,9 +119,9 @@ function UploadHomeworkBtn({lesson}) {
                         sx={{
                             bgcolor: "#702DFF"
                         }}
-                        onClick={lesson.homework_id ? addHomework : uploadHomework}>Отправить</Button>
+                        onClick={lesson.homework_status === 3 ? uploadHomework : addHomework}>Отправить</Button>
                 </div>
-            }
+
 
             <div>{error && <Alert severity="error">{error}</Alert>}</div>
         </div>

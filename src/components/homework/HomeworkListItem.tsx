@@ -96,7 +96,7 @@ function HomeworkListItem({item}) {
                         {item.homework}
                     </Typography>
                 </DialogContent>
-                {item.homework_id && <DialogContent dividers>
+                {item.homework_status !== 3 && <DialogContent dividers>
                     <Typography gutterBottom>
                         <b>Загруженные файлы</b>
                         <LoadedFilesList homeworkID={item.homework_id} />
