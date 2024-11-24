@@ -9,8 +9,23 @@ import {useUserID} from "@/hooks/useUserID";
 import {useQuery} from "@tanstack/react-query";
 import {getStartAndEndDate} from "@/utils/utils";
 
+
+interface HomeworkItem {
+    id: number;
+    subject_id: number;
+    topic: string;
+    homework: string;
+    date: FormData;
+}
+
+interface HomeworkListProps {
+    homework: HomeworkItem[];
+}
+
+moment.locale("ru");
+
 // @ts-ignore
-const HomeworkListTeacher = () => {
+const HomeworkListStudent = () => {
     const userID = useUserID();
     const [date, setDate] = useState<Date>(moment().toDate());
 
@@ -24,13 +39,13 @@ const HomeworkListTeacher = () => {
     const getLessonsWithHomeWork = async (userID, date) => {
         let [start, end] = getStartAndEndDate(date)
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/lessons/teacher`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/lessons/homework/student`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                "teacher_id": userID,
+                "customer_id": userID,
                 "date_from": start,
                 "date_to": end,
                 "page": 0
@@ -64,13 +79,10 @@ const HomeworkListTeacher = () => {
         return <div>Не удалось загрузить домашние задания</div>
     }
 
-    console.log(data)
-
-
     return (
         <div className="flex flex-col h-full">
             <div className="h-full">
-                <button onClick={() => console.log(data)}>Click</button>
+
                 <Stack spacing={3}>
                     {/*@ts-ignore*/}
                     {data.map((item) => (
@@ -83,6 +95,6 @@ const HomeworkListTeacher = () => {
         ;
 };
 
-export default HomeworkListTeacher;
+export default HomeworkListStudent;
 
 

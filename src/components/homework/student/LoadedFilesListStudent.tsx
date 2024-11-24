@@ -1,7 +1,7 @@
 import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {Button} from "@mui/material";
 
-function LoadedFilesList({homeworkID}) {
+function LoadedFilesListStudent({homeworkID}) {
     const queryClient = useQueryClient();
 
     const {data, error, isPending, refetch} = useQuery({
@@ -113,4 +113,4 @@ function LoadedFilesList({homeworkID}) {
         ;
 }
 
-export default LoadedFilesList;
+export default LoadedFilesListStudent;

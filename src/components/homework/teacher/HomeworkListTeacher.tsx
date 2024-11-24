@@ -4,28 +4,13 @@ import React, {useState} from 'react';
 import HomeworkItemLoading from "@/components/homework/HomeworkItemLoading";
 import Stack from '@mui/material/Stack';
 import moment from 'moment'
-import HomeworkListItem from "@/components/homework/HomeworkListItem";
 import {useUserID} from "@/hooks/useUserID";
 import {useQuery} from "@tanstack/react-query";
 import {getStartAndEndDate} from "@/utils/utils";
-
-
-interface HomeworkItem {
-    id: number;
-    subject_id: number;
-    topic: string;
-    homework: string;
-    date: FormData;
-}
-
-interface HomeworkListProps {
-    homework: HomeworkItem[];
-}
-
-moment.locale("ru");
+import HomeworkListItemTeacher from "@/components/homework/teacher/HomeworkListItemTeacher";
 
 // @ts-ignore
-const HomeworkListStudent = () => {
+const HomeworkListTeacher = () => {
     const userID = useUserID();
     const [date, setDate] = useState<Date>(moment().toDate());
 
@@ -39,13 +24,13 @@ const HomeworkListStudent = () => {
     const getLessonsWithHomeWork = async (userID, date) => {
         let [start, end] = getStartAndEndDate(date)
 
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/lessons/homework/student`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/lessons/teacher`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                "customer_id": userID,
+                "teacher_id": userID,
                 "date_from": start,
                 "date_to": end,
                 "page": 0
@@ -79,15 +64,15 @@ const HomeworkListStudent = () => {
         return <div>Не удалось загрузить домашние задания</div>
     }
 
-    console.log(data)
     return (
         <div className="flex flex-col h-full">
             <div className="h-full">
-
+                <button onClick={() => console.log(data)}>Click</button>
+                {!data.length && <div>Нет домашних заданий</div>}
                 <Stack spacing={3}>
                     {/*@ts-ignore*/}
                     {data.map((item) => (
-                        <HomeworkListItem key={item.id} item={item}/>
+                        <HomeworkListItemTeacher key={item.id} item={item}/>
                     ))}
                 </Stack>
             </div>
@@ -96,6 +81,6 @@ const HomeworkListStudent = () => {
         ;
 };
 
-export default HomeworkListStudent;
+export default HomeworkListTeacher;
 
 

@@ -14,6 +14,7 @@ import UploadHomeworkBtn from "@/components/homework/UploadHomeworkBtn";
 import {grey} from "@mui/material/colors"
 import {useQuery} from "@tanstack/react-query";
 import LoadedFilesListStudent from "@/components/homework/student/LoadedFilesListStudent";
+import LoadedFilesListTeacher from "@/components/homework/teacher/LoadedFilesListTeacher";
 
 const BootstrapDialog = styled(Dialog)(({theme}) => ({
     '& .MuiDialogContent-root': {
@@ -24,7 +25,7 @@ const BootstrapDialog = styled(Dialog)(({theme}) => ({
     },
 }));
 
-function HomeworkListItem({item}) {
+function HomeworkListItemTeacher({item}) {
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -98,17 +99,17 @@ function HomeworkListItem({item}) {
                 </DialogContent>
                 {item.homework_status !== 3 && <DialogContent dividers>
                     <Typography gutterBottom>
-                        <b>Загруженные файлы</b>
-                        <LoadedFilesListStudent homeworkID={item.homework_id} />
+                        <b>Загруженные ДЗ</b>
+                        <LoadedFilesListTeacher item={item} />
                     </Typography>
                 </DialogContent>}
 
-                <DialogActions>
-                    <UploadHomeworkBtn lesson={item} />
-                </DialogActions>
+                {/*<DialogActions>*/}
+                {/*    <UploadHomeworkBtn lesson={item} />*/}
+                {/*</DialogActions>*/}
             </BootstrapDialog>
         </React.Fragment>
     );
 }
 
-export default HomeworkListItem;
+export default HomeworkListItemTeacher;
