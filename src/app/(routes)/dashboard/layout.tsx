@@ -1,7 +1,6 @@
 'use client'
 
 import {NavigationPanel} from "@/components/ui/NavigationPanel";
-import {ProfilePanel} from "@/components/ui/ProfilePanel";
 import {useUserID} from "@/hooks/useUserID";
 import {useInnerUserStore} from "@/store/innerUserStore";
 import {useEffect} from "react";

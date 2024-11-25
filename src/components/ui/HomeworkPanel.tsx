@@ -10,6 +10,7 @@ moment.locale("ru");
 const HomeworkPanel: React.FC = () => {
     const user = useInnerUserStore((state) => state.innerUser);
 
+    // @ts-ignore
     const showList = (user) => {
         if (user.role == "teacher") {
             return <HomeworkListTeacher />

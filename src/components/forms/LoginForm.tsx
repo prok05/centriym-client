@@ -16,6 +16,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Visibility from "@mui/icons-material/Visibility";
 import FormControl from "@mui/material/FormControl";
 import LockIcon from '@mui/icons-material/Lock';
+import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 
 export default function LoginForm() {
     const router = useRouter();
@@ -107,6 +108,10 @@ export default function LoginForm() {
                         label="Телефон"
                         fullWidth
                         name="phone"
+                        getFlagElement={(isoCode, { imgProps, countryName, isSelected }) => {
+                            return <LocalPhoneIcon />
+                        }}
+                        unknownFlagElement={<LocalPhoneIcon />}
                         //defaultCountry="RU"
                         disableDropdown
                         onChange={handlePhoneChange}

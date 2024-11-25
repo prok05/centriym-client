@@ -19,6 +19,7 @@ const VisuallyHiddenInput = styled('input')({
     width: 1,
 });
 
+// @ts-ignore
 function UploadHomeworkBtn({lesson}) {
     const userID = useUserID()
     const [selectedFile, setSelectedFile] = useState<File | null>();
@@ -27,6 +28,7 @@ function UploadHomeworkBtn({lesson}) {
 
     const queryClient = useQueryClient();
 
+    // @ts-ignore
     const uploadFile = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -45,9 +47,11 @@ function UploadHomeworkBtn({lesson}) {
         }
 
         const formData = new FormData()
+        // @ts-ignore
         formData.append('file', selectedFile)
         formData.append('lesson_id', lesson.id)
         formData.append('teacher_id', lesson.teacher_ids[0])
+        // @ts-ignore
         formData.append('student_id', userID)
 
         const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/upload/homework`,
@@ -58,6 +62,7 @@ function UploadHomeworkBtn({lesson}) {
             })
 
         if (res.status === 201) {
+            // @ts-ignore
             await queryClient.invalidateQueries(['homework']);
             setSelectedFile(null)
             setUploaded(true)
@@ -70,6 +75,7 @@ function UploadHomeworkBtn({lesson}) {
         }
 
         const formData = new FormData()
+        // @ts-ignore
         formData.append('file', selectedFile)
         formData.append('homework_id', lesson.homework_id)
 
@@ -82,6 +88,7 @@ function UploadHomeworkBtn({lesson}) {
 
         if (res.status === 201) {
             setSelectedFile(null)
+            // @ts-ignore
             await queryClient.invalidateQueries(['homework']);
             setUploaded(true)
         }
@@ -100,7 +107,7 @@ function UploadHomeworkBtn({lesson}) {
                             bgcolor: "#702DFF"
                         }}
                     >
-                        {lesson.homework_status === 3 ? 'Загрузить ДЗ' : 'Догрузить ДЗ'}
+                        {lesson.homework_status === 3 || lesson.homework_status === 4 ? 'Загрузить ДЗ' : 'Догрузить ДЗ'}
                         <VisuallyHiddenInput
                             type="file"
                             onChange={uploadFile}

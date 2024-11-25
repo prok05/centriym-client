@@ -9,13 +9,16 @@ import Chip from "@mui/material/Chip";
 import {grey} from "@mui/material/colors";
 import {bgcolor} from "@mui/system";
 
-function LoadedFilesListTeacher({item}) {
+// @ts-ignore
+function LoadedFilesListTeacher({lesson}) {
     const queryClient = useQueryClient();
     const [expanded, setExpanded] = React.useState<number | false>(false);
 
     const {data, error, isPending, refetch} = useQuery({
-        queryKey: ['homework-teacher', item.id],
-        queryFn: () => getHomeworkFiles(item.teacher_ids[0], item.id, item.customer_ids)
+        queryKey: ['homework-teacher', lesson.id],
+        queryFn: () => getHomeworkFiles(lesson.teacher_ids[0], lesson.id, lesson.customer_ids),
+        refetchOnMount: true,
+        staleTime: 1000
     })
 
     // @ts-ignore
@@ -43,12 +46,15 @@ function LoadedFilesListTeacher({item}) {
         if (status === 3) {
             return "#d4e2ff"
         } else if (status === 2) {
-            return "#d4e2ff"
+            return "#5fa8d3"
         } else if (status === 1) {
-            return "#d9ffda"
+            return "#5dd39e"
+        } else if (status === 4) {
+            return "#d1495b"
         }
     }
 
+    // @ts-ignore
     const handleDownLoadFile = (id, lastName) => {
         fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/homework/file/${id}/download`, {
             method: 'GET',
@@ -58,14 +64,20 @@ function LoadedFilesListTeacher({item}) {
                     throw new Error('Failed to download file');
                 }
                 const contentDisposition = response.headers.get('Content-Disposition');
-                let filename = `file_${id}_${lastName}.docx`;
+                console.log(contentDisposition)
+                let filename = `file_${id}_${lastName}`;
                 if (contentDisposition) {
                     const matches = contentDisposition.match(/filename="([^"]+)"/);
                     if (matches && matches[1]) {
                         filename = matches[1]; // Получаем имя файла
                     }
                 }
-                console.log(filename)
+                const extensionIndex = filename.lastIndexOf('.');
+                if (extensionIndex !== -1) {
+                    filename = `${filename.slice(0, extensionIndex)}_${lastName}${filename.slice(extensionIndex)}`;
+                } else {
+                    filename = `${filename}_${lastName}`;
+                }
                 return response.blob().then((blob) => ({blob, filename}));
             })
             .then(({blob, filename}) => {
@@ -86,6 +98,21 @@ function LoadedFilesListTeacher({item}) {
             });
     }
 
+    const handleUpdateHomework = async (id: number, status: number, lessonID: number) => {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/homework/${id}`, {
+            method: "PATCH",
+            body: JSON.stringify({
+                "status": status
+            }),
+            credentials: "include"
+        });
+        console.log(response.status)
+        if (response.status == 200) {
+            // @ts-ignore
+            await queryClient.invalidateQueries(['homework-teacher', lessonID]);
+        }
+    }
+
     if (isPending) {
         return <div>Загрузка</div>
     }
@@ -93,12 +120,13 @@ function LoadedFilesListTeacher({item}) {
     console.log(data)
     return (
         <div className="mt-2">
+            {/*@ts-ignore*/}
             {data.map((el) => (
                 <Accordion
                     expanded={expanded === el.homework_id}
                     onChange={handleChange(el.homework_id)}
-                    disabled={!el.file_id || el.homework_id === 1}
-                    sx={{bgcolor: bgcolor(el.homework_status)}}>
+                    disabled={!el.file_id || el.homework_status === 4 || el.homework_status === 1}
+                    sx={{border: `2px solid ${bgcolor(el.homework_status)}`}}>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}
                         aria-controls="panel1bh-content"
@@ -109,17 +137,29 @@ function LoadedFilesListTeacher({item}) {
                         </Typography>
                     </AccordionSummary>
                     <AccordionDetails>
+                        {/*@ts-ignore*/}
                         {el.file_id.map((file) => (
-                            <div className="flex justify-between border-b-2 border-slate-400 p-2">
+                            <div className="mt-2 flex justify-between items-center border-2 rounded p-2">
                                 <div>Файл {file}</div>
-                                <Button onClick={() => handleDownLoadFile(file, el.last_name)} size="small" variant="contained">Скачать</Button>
+                                <Button
+                                    onClick={() => handleDownLoadFile(file, el.last_name)}
+                                    size="small"
+                                    variant="contained"
+                                    sx={{bgcolor: "#5393b8"}}>Скачать</Button>
                             </div>
 
                         ))}
-                        <div className="flex mt-2">
-                            <Button size="small" variant="contained" color="success" sx={{marginRight: "10px", bgcolor: "#10ae54"}}>Принять</Button>
-                            <Button size="small" variant="contained" color="error" sx={{bgcolor: "#ff2d5e"}}>Отклонить</Button>
-                        </div>
+                        {el.homework_status === 2 &&
+                            <div className="flex mt-3">
+                                <Button size="small" variant="contained"
+                                        sx={{marginRight: "10px", bgcolor: "#10ae54"}}
+                                        onClick={() => handleUpdateHomework(el.homework_id, 1, lesson.id)}>Принять</Button>
+                                <Button size="small" variant="contained" color="error"
+                                        sx={{bgcolor: "#ff2d5e"}}
+                                        onClick={() => handleUpdateHomework(el.homework_id, 4, lesson.id)}>Отклонить</Button>
+                            </div>
+                        }
+
                     </AccordionDetails>
                 </Accordion>
             ))}

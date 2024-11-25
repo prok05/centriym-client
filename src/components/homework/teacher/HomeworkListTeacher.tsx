@@ -71,8 +71,8 @@ const HomeworkListTeacher = () => {
                 {!data.length && <div>Нет домашних заданий</div>}
                 <Stack spacing={3}>
                     {/*@ts-ignore*/}
-                    {data.map((item) => (
-                        <HomeworkListItemTeacher key={item.id} item={item}/>
+                    {data.map((lesson) => (
+                        <HomeworkListItemTeacher key={lesson.id} lesson={lesson}/>
                     ))}
                 </Stack>
             </div>

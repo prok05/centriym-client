@@ -4,7 +4,7 @@ import React, {useState} from 'react';
 import HomeworkItemLoading from "@/components/homework/HomeworkItemLoading";
 import Stack from '@mui/material/Stack';
 import moment from 'moment'
-import HomeworkListItem from "@/components/homework/HomeworkListItem";
+import HomeworkListItemStudent from "@/components/homework/student/HomeworkListItemStudent";
 import {useUserID} from "@/hooks/useUserID";
 import {useQuery} from "@tanstack/react-query";
 import {getStartAndEndDate} from "@/utils/utils";
@@ -33,6 +33,7 @@ const HomeworkListStudent = () => {
         queryKey: ['homework'],
         queryFn: () => getLessonsWithHomeWork(userID, date),
         enabled: !!userID,
+        staleTime: 1000
     })
 
     // @ts-ignore
@@ -86,7 +87,7 @@ const HomeworkListStudent = () => {
                 <Stack spacing={3}>
                     {/*@ts-ignore*/}
                     {data.map((item) => (
-                        <HomeworkListItem key={item.id} item={item}/>
+                        <HomeworkListItemStudent key={item.id} item={item}/>
                     ))}
                 </Stack>
             </div>

@@ -6,6 +6,7 @@ interface User {
     name: string;
     balance: string;
     paid_lesson_count: number;
+    role: string;
 }
 
 interface UseUserResult {

@@ -12,6 +12,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { MuiTelInput } from 'mui-tel-input'
 import { useRouter } from 'next/navigation'
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 
 export default function RegisterForm() {
     const [phone, setPhone] = useState();
@@ -137,8 +138,13 @@ export default function RegisterForm() {
                             fullWidth
                             name="phone"
                             // defaultCountry="RU"
+                            // forceCallingCode
+                            getFlagElement={(isoCode, { imgProps, countryName, isSelected }) => {
+                                return <LocalPhoneIcon />
+                            }}
                             disableDropdown
                             onChange={handlePhoneChange}
+                            unknownFlagElement={<LocalPhoneIcon />}
                             value={phone}
                             sx={{
                                 color: "black",

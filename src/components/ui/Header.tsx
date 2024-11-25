@@ -84,7 +84,7 @@ export function Header() {
                         {/*@ts-ignore*/}
                         <ProfileTooltip title={
                             <Fragment>
-                                <ProfileMenu isLoading={isLoading} paid_lesson_count={user?.paid_lesson_count}/>
+                                <ProfileMenu role={user?.role} isLoading={isLoading} paid_lesson_count={user?.paid_lesson_count}/>
                             </Fragment>
                         }>
                             <div className="flex items-center cursor-pointer">

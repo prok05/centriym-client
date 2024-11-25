@@ -1,12 +1,14 @@
 import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {Button} from "@mui/material";
 
+// @ts-ignore
 function LoadedFilesListStudent({homeworkID}) {
     const queryClient = useQueryClient();
 
     const {data, error, isPending, refetch} = useQuery({
         queryKey: ['homework-files', homeworkID],
-        queryFn: () => getHomeworkFiles(homeworkID)
+        queryFn: () => getHomeworkFiles(homeworkID),
+        staleTime: 1000
     })
 
     // @ts-ignore
@@ -20,6 +22,7 @@ function LoadedFilesListStudent({homeworkID}) {
         return response.json()
     }
 
+    // @ts-ignore
     const handleDownLoadFile = (id) => {
         fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/homework/file/${id}/download`, {
             method: 'GET',
@@ -36,7 +39,6 @@ function LoadedFilesListStudent({homeworkID}) {
                         filename = matches[1]; // Получаем имя файла
                     }
                 }
-                console.log(filename)
                 return response.blob().then((blob) => ({blob, filename}));
             })
             .then(({blob, filename}) => {
@@ -57,12 +59,14 @@ function LoadedFilesListStudent({homeworkID}) {
             });
     }
 
+    // @ts-ignore
     const handleDeleteFile = async (id) => {
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/homework/files/${id}`, {
             method: "DELETE"
         });
         if (response.status == 200) {
 
+            // @ts-ignore
             await queryClient.invalidateQueries(['homework-files', homeworkID]);
         }
     }
@@ -71,12 +75,10 @@ function LoadedFilesListStudent({homeworkID}) {
         return <div>Загрузка</div>
     }
 
-    console.log(data)
-    console.log(homeworkID)
-
     return (
         <div>
             {data.length ? (
+                // @ts-ignore
                 data.map((el) => (
                     <div
                         key={el.id}
