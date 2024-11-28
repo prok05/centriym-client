@@ -3,11 +3,10 @@
 import ChatList from "@/components/messages/ChatList";
 import {Conversation} from "@/components/messages/Conversation";
 import NewMessageIcon from "@/components/icons/NewMessageIcon";
-import {Suspense, useEffect, useRef, useState} from "react";
-import ChatListLoading from "@/components/messages/ChatListLoading";
+import {useEffect, useRef, useState} from "react";
 import NewChat from "@/components/messages/NewChat";
 
-export function MessagesPanel() {
+export function MessagesPanelStudent() {
     const [isCreatingChat, setIsCreatingChat] = useState<boolean>(false)
     const [selectedChat, setSelectedChat] = useState(null);
     const [selectedUser, setSelectedUser] = useState(null)
@@ -36,7 +35,6 @@ export function MessagesPanel() {
                         <NewMessageIcon/>
                     </button>
                 </div>
-
                 {/*создание нового чата*/}
                 {isCreatingChat && <NewChat
                     setSelectedUser={setSelectedUser}
@@ -54,7 +52,6 @@ export function MessagesPanel() {
                     setSelectedUser={setSelectedUser}
                 />
             </div>
-
         </div>
     )
 }

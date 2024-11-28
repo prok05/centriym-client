@@ -25,7 +25,6 @@ async function fetchChats() {
 
 // @ts-ignore
 export default function ChatList({setSelectedChat}) {
-    const innerUser = useInnerUserStore((state) => state.innerUser)
     const [chats, setChats] = useState(null)
     const [isLoading, setIsLoading] = useState(true)
 

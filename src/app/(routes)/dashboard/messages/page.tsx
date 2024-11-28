@@ -1,7 +1,10 @@
-import {MessagesPanel} from "@/components/messages/MessagesPanel";
+import {MessagesPanelStudent} from "@/components/messages/student/MessagesPanelStudent";
+import {getSession} from "@/utils/getSession";
 
-export default function MessagesPage() {
+export default async function MessagesPage() {
+    const user = await getSession()
+
     return (
-        <MessagesPanel />
+        <MessagesPanelStudent />
     );
 }
