@@ -1,13 +1,13 @@
 import {Fab, IconButton, TextField, Typography} from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 import CloseIcon from '@mui/icons-material/Close';
-import {useQuery} from "@tanstack/react-query";
+import {useMutation, useQuery} from "@tanstack/react-query";
 import EmptyMessages from "@/components/messages/EmptyMessages";
 import {useState} from "react";
 import MessageList from "@/components/messages/MessageList";
 
 // @ts-ignore
-export function OpenedChat({selectedChat, setSelectedChat, user}) {
+export function OpenedChatTeacher({selectedChat, setSelectedChat, user}) {
     const [message, setMessage] = useState('');
 
     function closeChat() {
@@ -16,26 +16,31 @@ export function OpenedChat({selectedChat, setSelectedChat, user}) {
 
     const {data, error, isPending, refetch} = useQuery({
         queryKey: ['chat', selectedChat.id],
-        queryFn: () => getChats(),
+        queryFn: async() => {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/chats/${selectedChat.id}/messages`, {
+                method: "GET",
+                credentials: "include"
+            });
+
+            return await response.json();
+        },
         refetchOnMount: true,
         staleTime: 5_000
     })
 
-    // @ts-ignore
-    const getChats = async () => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/chats/get/${selectedChat.id}`, {
-            method: "GET",
-            credentials: "include"
-        });
-
-        return await response.json();
-    };
+    // // @ts-ignore
+    // const getChats = async () => {
+    //
+    // };
 
     const sendMessage = async(id, message) => {
+        const trimmedMessage = message.trim()
         const body = {
             "user_id": id,
             "message": {
-                "content": message
+                "content": trimmedMessage,
+                "chat_id": selectedChat.id,
+                "sender_id": user.user.id
             }
         }
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/messages`, {
@@ -48,7 +53,25 @@ export function OpenedChat({selectedChat, setSelectedChat, user}) {
         }
     }
 
+    const sendMessageMutation = useMutation({
+        mutationKey: ["send-message"],
+        mutationFn: (variables: {message: string, chatID: number, userID: number}) => {
+            const trimmedMessage = variables.message.trim()
+            const body = {
+                "user_id": 0,
+                "message": {
+                    "content": trimmedMessage,
+                    "chat_id": variables.chatID,
+                    "sender_id": variables.userID
+                }
+            }
+            return
+        },
+        onSuccess() {
 
+            setMessage('')
+        }
+    })
 
     return (
         <div className="flex flex-col h-full relative">
@@ -65,7 +88,7 @@ export function OpenedChat({selectedChat, setSelectedChat, user}) {
                 {!data && <EmptyMessages />}
                 {data && <MessageList user={user} messages={data}/>}
 
-                {/*<button onClick={() => console.log(data)}>Click</button>*/}
+                <button onClick={() => console.log(data)}>Click</button>
             </div>
             <div className="flex justify-center items-center bg-gray-50 pb-3 relative">
                 <TextField
@@ -73,13 +96,13 @@ export function OpenedChat({selectedChat, setSelectedChat, user}) {
                     variant="outlined"
                     multiline
                     value={message}
-                    placeholder={"Напишите сообщение"}
+                    placeholder={'Напишите сообщение'}
                     onChange={(event) => setMessage(event.target.value)}
                     maxRows={4}
                     sx={{
-                               minWidth: "70%",
-                               bgcolor: "white",
-                           }}
+                        minWidth: "70%",
+                        bgcolor: "white",
+                    }}
                 />
                 <div className="ml-7">
                     <Fab
@@ -87,10 +110,10 @@ export function OpenedChat({selectedChat, setSelectedChat, user}) {
                         color="primary"
                         aria-label="add"
                         onClick={() => sendMessage(selectedChat.id, message)}
-                         sx={{
-                             bgcolor: "#702DFF",
-                         }
-                         }>
+                        sx={{
+                            bgcolor: "#702DFF",
+                        }
+                        }>
                         <SendIcon/>
                     </Fab>
                 </div>

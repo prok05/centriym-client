@@ -1,15 +1,11 @@
 'use client'
 
-import ChatList from "@/components/messages/ChatList";
-import {Conversation} from "@/components/messages/Conversation";
-import NewMessageIcon from "@/components/icons/NewMessageIcon";
 import {useEffect, useRef, useState} from "react";
-import NewChat from "@/components/messages/NewChat";
+import ChatListTeacher from "@/components/messages/teacher/ChatListTeacher";
+import {ConversationTeacher} from "@/components/messages/teacher/ConversationTeacher";
 
-export function MessagesPanelStudent() {
-    const [isCreatingChat, setIsCreatingChat] = useState<boolean>(false)
+export function MessagesPanelTeacher({user}) {
     const [selectedChat, setSelectedChat] = useState(null);
-    const [selectedUser, setSelectedUser] = useState(null)
     const socket = useRef<WebSocket | null>()
     const [ws, setWs] = useState(null);
 
@@ -31,25 +27,17 @@ export function MessagesPanelStudent() {
             <div className="flex flex-col w-1/3 border-r-2 relative">
                 <div className="flex justify-between items-center p-5 border-b-2">
                     <h2 className="font-bold">Сообщения</h2>
-                    <button onClick={() => setIsCreatingChat(true)} className="w-[26px] h-[23px]">
-                        <NewMessageIcon/>
-                    </button>
                 </div>
-                {/*создание нового чата*/}
-                {isCreatingChat && <NewChat
-                    setSelectedUser={setSelectedUser}
-                    setIsCreatingChat={setIsCreatingChat}/>}
 
                 <div className="h-full">
-                    <ChatList setSelectedChat={setSelectedChat}/>
+                    <ChatListTeacher user={user} setSelectedChat={setSelectedChat}/>
                 </div>
             </div>
             <div className="w-2/3">
-                <Conversation
+                <ConversationTeacher
+                    user={user}
                     setSelectedChat={setSelectedChat}
                     selectedChat={selectedChat}
-                    selectedUser={selectedUser}
-                    setSelectedUser={setSelectedUser}
                 />
             </div>
         </div>

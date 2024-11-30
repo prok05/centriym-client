@@ -2,6 +2,7 @@ import {FetchChatI} from "@/lib/types";
 import ChatListLoading from "@/components/messages/ChatListLoading";
 import ChatListItem from "@/components/messages/ChatListItem";
 import {useQuery} from "@tanstack/react-query";
+import ChatListItemTeacher from "@/components/messages/teacher/ChatListItemTeacher";
 
 interface Props {
     data: FetchChatI
@@ -21,7 +22,8 @@ async function fetchChats() {
 }
 
 // @ts-ignore
-export default function ChatList({setSelectedChat}) {
+export default function ChatListTeacher({setSelectedChat, user}) {
+
     const getTeachers = async () => {
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/chats`, {
             method: "GET",
@@ -32,7 +34,7 @@ export default function ChatList({setSelectedChat}) {
     };
 
     const {data, error, isPending, refetch} = useQuery({
-        queryKey: ['student-chats'],
+        queryKey: ['teacher-chats', user.user.id],
         queryFn: getTeachers
     })
 
@@ -46,12 +48,13 @@ export default function ChatList({setSelectedChat}) {
     return (
         <div>
             {/*@ts-ignore*/}
-            {data.map((teacher) => {
-                {/*@ts-ignore*/}
-                return <ChatListItem className="p-2 hover:bg-purple-sec cursor-pointer"
-                                     chat={teacher}
-                                     setSelectedChat={setSelectedChat}
-                                     key={teacher.id}>1</ChatListItem>
+            <button onClick={() => console.log(data)}>Click</button>
+            {data.map((chat) => {
+                return <ChatListItemTeacher
+                    user={user}
+                    chat={chat}
+                    setSelectedChat={setSelectedChat}
+                    key={chat.id} />
             })}
         </div>
     )

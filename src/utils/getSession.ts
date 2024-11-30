@@ -1,6 +1,5 @@
 import {cookies} from "next/headers";
 import jwt from "jsonwebtoken";
-import {string} from "prop-types";
 
 const SECRET = process.env.JWT_SECRET || 'secret'
 
