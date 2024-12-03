@@ -16,6 +16,15 @@ export function MessagesPanelTeacher({user}) {
         socket.current.onopen = () => {
             console.log("Connected")
         }
+        socket.current.onmessage = (event) => {
+            console.log("chat event")
+            const notification = JSON.parse(event.data);
+            if (notification.type === "NEW_MESSAGE") {
+                // Логика для обновления списка чатов
+                console.log("New message in chat:", notification.payload.chat_id);
+            }
+        }
+
         return () => {
             socket.current?.close(); // Закрываем соединение при размонтировании компонента
         };

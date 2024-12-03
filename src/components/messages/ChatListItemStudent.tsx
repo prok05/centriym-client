@@ -1,13 +1,13 @@
 import {Avatar, Skeleton} from "@mui/material";
 
 // @ts-ignore
-export default function ChatListItem({chat, setSelectedChat}) {
+export default function ChatListItemStudent({chat, setSelectedChat}) {
     function onClick() {
         setSelectedChat(chat)
     }
 
     return (
-        <div className="flex px-2 py-2 hover:bg-purple-pale transition-colors cursor-pointer"
+        <div className="flex px-4 py-4 hover:bg-purple-pale transition-colors cursor-pointer"
             onClick={onClick}
         >
             <div className="mr-5">

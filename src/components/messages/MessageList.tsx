@@ -21,7 +21,7 @@ function MessageList({messages, user}) {
     }
 
     return (
-        <div className="flex flex-col py-2 w-4/5">
+        <div className="flex flex-col py-6 w-4/5">
             {messages.map((message) => (
                 <Message key={message.id} user={user} message={message}/>
             ))}

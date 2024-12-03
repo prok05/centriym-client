@@ -1,7 +1,7 @@
 'use client';
 
 import {useState} from "react";
-import {OpenedChat} from "@/components/messages/OpenedChat";
+import {OpenedChatStudent} from "@/components/messages/OpenedChatStudent";
 import {NoChat} from "@/components/messages/NoChat";
 import {Button, TextField} from "@mui/material";
 
@@ -48,7 +48,7 @@ export function Conversation({selectedChat, setSelectedChat, selectedUser, setSe
 
     return (
         <div className="h-full">
-            {selectedChat ? (<OpenedChat
+            {selectedChat ? (<OpenedChatStudent
                 user={user}
                 setSelectedChat={setSelectedChat}
                 selectedChat={selectedChat}/>) : (<NoChat/>)}

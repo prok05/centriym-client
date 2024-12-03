@@ -67,7 +67,7 @@ const HomeworkListTeacher = () => {
     return (
         <div className="flex flex-col h-full">
             <div className="h-full">
-                <button onClick={() => console.log(data)}>Click</button>
+                {/*<button onClick={() => console.log(data)}>Click</button>*/}
                 {!data.length && <div>Нет домашних заданий</div>}
                 <Stack spacing={3}>
                     {/*@ts-ignore*/}

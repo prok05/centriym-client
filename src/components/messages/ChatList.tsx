@@ -1,6 +1,6 @@
 import {FetchChatI} from "@/lib/types";
 import ChatListLoading from "@/components/messages/ChatListLoading";
-import ChatListItem from "@/components/messages/ChatListItem";
+import ChatListItemStudent from "@/components/messages/ChatListItemStudent";
 import {useQuery} from "@tanstack/react-query";
 
 interface Props {
@@ -48,10 +48,10 @@ export default function ChatList({setSelectedChat}) {
             {/*@ts-ignore*/}
             {data.map((teacher) => {
                 {/*@ts-ignore*/}
-                return <ChatListItem className="p-2 hover:bg-purple-sec cursor-pointer"
-                                     chat={teacher}
-                                     setSelectedChat={setSelectedChat}
-                                     key={teacher.id}>1</ChatListItem>
+                return <ChatListItemStudent className="p-2 hover:bg-purple-sec cursor-pointer"
+                                            chat={teacher}
+                                            setSelectedChat={setSelectedChat}
+                                            key={teacher.id}>1</ChatListItemStudent>
             })}
         </div>
     )

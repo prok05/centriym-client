@@ -1,6 +1,6 @@
 import {FetchChatI} from "@/lib/types";
 import ChatListLoading from "@/components/messages/ChatListLoading";
-import ChatListItem from "@/components/messages/ChatListItem";
+import ChatListItemStudent from "@/components/messages/ChatListItemStudent";
 import {useQuery} from "@tanstack/react-query";
 import ChatListItemTeacher from "@/components/messages/teacher/ChatListItemTeacher";
 
@@ -48,7 +48,7 @@ export default function ChatListTeacher({setSelectedChat, user}) {
     return (
         <div>
             {/*@ts-ignore*/}
-            <button onClick={() => console.log(data)}>Click</button>
+            {/*<button onClick={() => console.log(data)}>Click</button>*/}
             {data.map((chat) => {
                 return <ChatListItemTeacher
                     user={user}

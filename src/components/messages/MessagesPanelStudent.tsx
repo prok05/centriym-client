@@ -2,26 +2,31 @@
 
 import ChatList from "@/components/messages/ChatList";
 import {Conversation} from "@/components/messages/Conversation";
-import NewMessageIcon from "@/components/icons/NewMessageIcon";
 import {useEffect, useRef, useState} from "react";
-import NewChat from "@/components/messages/NewChat";
 
 export function MessagesPanelStudent({user}) {
-    // const [isCreatingChat, setIsCreatingChat] = useState<boolean>(false)
     const [selectedChat, setSelectedChat] = useState(null);
     const [selectedUser, setSelectedUser] = useState(null)
-    const socket = useRef<WebSocket | null>()
+    const chatSocket = useRef<WebSocket | null>()
     const [ws, setWs] = useState(null);
 
     useEffect(() => {
         // Устанавливаем WebSocket соединение
 
-        socket.current = new WebSocket(`${process.env.NEXT_PUBLIC_BACKEND_URL}/ws`)
-        socket.current.onopen = () => {
+        chatSocket.current = new WebSocket(`${process.env.NEXT_PUBLIC_BACKEND_URL}/ws`)
+        chatSocket.current.onopen = () => {
             console.log("Connected")
         }
+        chatSocket.current.onmessage = (event) => {
+            console.log("chat event", event.data)
+            const notification = JSON.parse(event.data);
+            if (notification.type === "NEW_MESSAGE") {
+                // Логика для обновления списка чатов
+                console.log("New message in chat:", notification.payload.chat_id);
+            }
+        }
         return () => {
-            socket.current?.close(); // Закрываем соединение при размонтировании компонента
+            chatSocket.current?.close(); // Закрываем соединение при размонтировании компонента
         };
     }, []);
 
@@ -31,14 +36,7 @@ export function MessagesPanelStudent({user}) {
             <div className="flex flex-col w-1/3 border-r-2 relative">
                 <div className="flex justify-between items-center p-5 border-b-2">
                     <h2 className="font-bold">Сообщения</h2>
-                    {/*<button onClick={() => setIsCreatingChat(true)} className="w-[26px] h-[23px]">*/}
-                    {/*    <NewMessageIcon/>*/}
-                    {/*</button>*/}
                 </div>
-                {/*создание нового чата*/}
-                {/*{isCreatingChat && <NewChat*/}
-                {/*    setSelectedUser={setSelectedUser}*/}
-                {/*    setIsCreatingChat={setIsCreatingChat}/>}*/}
 
                 <div className="h-full">
                     <ChatList setSelectedChat={setSelectedChat}/>

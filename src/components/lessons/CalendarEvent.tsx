@@ -56,7 +56,7 @@ export function CalendarEvent({event}) {
     const EnterLessonBtn = () => {
         if (event.streaming) {
             return <ColorButton startIcon={<LoginIcon/>} variant="contained"
-                                onClick={() => window.open(event.streaming[0], '_blank')}>
+                                onClick={() => window.open(event.streaming[0], '_blank')} disabled={event.status === 3}>
                 Войти в урок
             </ColorButton>
         } else {
