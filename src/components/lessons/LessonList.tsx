@@ -10,7 +10,7 @@ import {keepPreviousData, useQuery} from "@tanstack/react-query";
 import {useInnerUserStore} from "@/store/innerUserStore";
 
 
-export function LessonList() {
+export function LessonList({user}) {
     const userID = useUserID()
     const innerUser = useInnerUserStore((state) => state.innerUser);
     const lessons = useLessonStore((state) => state.lessons);
@@ -89,6 +89,7 @@ export function LessonList() {
                     data={data}
                     isPlaceholderData={isPlaceholderData}
                     isPending={isPending}
+                    user={user}
                 />
             </div>
         </div>

@@ -1,8 +1,10 @@
 import {LessonsPanel} from "@/components/ui/LessonsPanel";
-import {LessonList} from "@/components/lessons/LessonList";
+import {getSession} from "@/utils/getSession";
 
-export default function LessonsPage() {
+export default async function LessonsPage() {
+    const user = await getSession()
+
     return (
-        <LessonsPanel />
+        <LessonsPanel user={user}/>
     );
 }

@@ -14,7 +14,6 @@ export default async function middleware(req: NextRequest) {
     if (token) {
         session = jwt.decode(token);
     }
-    console.log(path)
     if (path === "/") {
         // Если есть токен, перенаправляем на "/dashboard"
         // @ts-ignore

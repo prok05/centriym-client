@@ -35,6 +35,7 @@ export const getEventsFromLessons = (lessons) => {
         // @ts-ignore
         return lessons.map((lesson) => {
             return {
+                id: lesson.id,
                 title: getSubjectName(lesson.subject_id),
                 topic: lesson.topic,
                 note: lesson.note,
@@ -45,6 +46,7 @@ export const getEventsFromLessons = (lessons) => {
                 end: moment(lesson.time_to).toDate(),
                 hourStart: moment(lesson.time_from).format("HH:mm"),
                 hourEnd: moment(lesson.time_to).format("HH:mm"),
+                teacherIDs: lesson.teacher_ids
             }
         })
     }

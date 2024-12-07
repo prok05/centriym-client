@@ -101,16 +101,15 @@ function HomeworkListItemStudent({item}) {
                         {item.homework}
                     </Typography>
                 </DialogContent>
-                {item.homework_status !== 1 &&
-                    <DialogContent dividers>
-                        <Typography gutterBottom>
-                            <b>Загруженные файлы</b>
-                            <LoadedFilesListStudent homeworkID={item.homework_id}/>
-                        </Typography>
-                    </DialogContent>}
+                <DialogContent dividers>
+                    <Typography gutterBottom>
+                        <b>Загруженные файлы</b>
+                        <LoadedFilesListStudent homeworkID={item.homework_id}/>
+                    </Typography>
+                </DialogContent>
                 {item.homework_status === 1 &&
                     <DialogContent dividers>
-                        <Alert icon={<CheckIcon fontSize="inherit" />} severity="success">
+                        <Alert icon={<CheckIcon fontSize="inherit"/>} severity="success">
                             Домашнее задание принято преподавателем.
                         </Alert>
                     </DialogContent>}

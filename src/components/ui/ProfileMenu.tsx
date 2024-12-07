@@ -6,6 +6,7 @@ import BookOutlinedIcon from '@mui/icons-material/BookOutlined';
 import Link from "next/link";
 import {Skeleton} from "@mui/material";
 import {useRouter} from 'next/navigation'
+import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 
 // @ts-ignore
 export function ProfileMenu({role, paid_lesson_count, isLoading}) {
@@ -54,6 +55,17 @@ export function ProfileMenu({role, paid_lesson_count, isLoading}) {
                         </div>
                         <div>{isLoading ?
                             <Skeleton width="30px" variant="text" sx={{fontSize: '1rem'}}/> : "Преподаватель"}</div>
+                    </li>
+                }
+
+                {role === "supervisor"
+                    &&
+                    <li className="flex items-center p-3 border-b">
+                        <div className="mr-3">
+                            <SupervisorAccountIcon/>
+                        </div>
+                        <div>{isLoading ?
+                            <Skeleton width="30px" variant="text" sx={{fontSize: '1rem'}}/> : "Методист"}</div>
                     </li>
                 }
 

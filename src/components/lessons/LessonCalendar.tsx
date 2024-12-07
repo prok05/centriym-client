@@ -9,9 +9,11 @@ import 'react-big-calendar/lib/css/react-big-calendar.css'
 import './calendar.css'
 import {getEventsFromLessons} from "@/utils/utils";
 import {CalendarEvent} from "@/components/lessons/CalendarEvent";
-import {LinearProgress} from "@mui/material";
+import {Button, LinearProgress} from "@mui/material";
 import LessonHelpTooltip from "@/components/lessons/LessonHelpTooltip";
 import React from 'react';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 
 const localizer = momentLocalizer(moment)
@@ -25,7 +27,7 @@ const VIEW_OPTIONS = [
 ];
 
 // @ts-ignore
-export function LessonCalendar({date, setDate, data, isPlaceholderData, isPending}) {
+export function LessonCalendar({date, setDate, data, isPlaceholderData, isPending, user}) {
     const [view, setView] = useState<(typeof Views)[Keys]>(Views.MONTH);
     // const lessons = useLessonStore((state) => state.lessons);
 
@@ -113,7 +115,38 @@ export function LessonCalendar({date, setDate, data, isPlaceholderData, isPendin
 
                     </div>
                     <div>
-                        <button className="px-4 py-2 bg-purple-main text-white"
+                        <ToggleButtonGroup
+                            color="primary"
+                            value={view}
+                            exclusive
+                            aria-label="Platform"
+                        >
+                            {VIEW_OPTIONS.map(({ id, label }) => (
+                                <ToggleButton
+                                    value={label}
+                                    onClick={() => setView(id)}
+                                    sx={{textTransform: 'capitalize'}}
+                                    className={`px-4 py-2 rounded ${
+                                        id === view
+                                            ? "bg-gray-200 text-black hover:bg-secondary"
+                                            : "bg-transparent text-black hover:bg-gray-200 hover:text-black"
+                                    }`}
+                                >{label}</ToggleButton>
+                            ))}
+                        </ToggleButtonGroup>
+                        {/*{VIEW_OPTIONS.map(({ id, label }) => (*/}
+                        {/*    <Button*/}
+                        {/*        onClick={() => setView(id)}*/}
+                        {/*        className={`px-4 py-2 rounded ${*/}
+                        {/*            id === view*/}
+                        {/*                ? "bg-gray-200 text-black hover:bg-secondary"*/}
+                        {/*                : "bg-transparent text-black hover:bg-gray-200 hover:text-black"*/}
+                        {/*        }`}*/}
+                        {/*    >*/}
+                        {/*        {label}*/}
+                        {/*    </Button>*/}
+                        {/*))}*/}
+                        <button className="px-4 py-2 bg-purple-main text-white ml-2"
                                 onClick={onTodayClick}>Сегодня
                         </button>
                     </div>
@@ -137,7 +170,15 @@ export function LessonCalendar({date, setDate, data, isPlaceholderData, isPendin
                     date={date}
                     view={view}
                     components={{
-                        month: {event: CalendarEvent}
+                        month: {
+                            event: (props) => <CalendarEvent {...props} view={view} user={user} />,
+                        },
+                        week: {
+                            event: (props) => <CalendarEvent {...props} view={view} user={user} />,
+                        },
+                        day: {
+                            event: (props) => <CalendarEvent {...props} view={view} user={user} />,
+                        },
                     }}
                     showAllEvents={true}
                 />

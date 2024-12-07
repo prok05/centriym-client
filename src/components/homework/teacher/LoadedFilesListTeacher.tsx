@@ -125,7 +125,7 @@ function LoadedFilesListTeacher({lesson}) {
                 <Accordion
                     expanded={expanded === el.homework_id}
                     onChange={handleChange(el.homework_id)}
-                    disabled={!el.file_id || el.homework_status === 4 || el.homework_status === 1}
+                    disabled={!el.file_id || el.homework_status === 4}
                     sx={{border: `2px solid ${bgcolor(el.homework_status)}`}}>
                     <AccordionSummary
                         expandIcon={<ExpandMoreIcon />}

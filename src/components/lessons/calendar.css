@@ -1,9 +1,32 @@
 .rbc-today {
-    background-color: #702DFF14;
+    background-color: rgba(154, 109, 251, 0.08);
 }
 
 .rbc-event {
     background-color: transparent;
+    border: none;
+}
+
+.rbc-event-label {
+    display: none;
+}
+
+.rbc-day-slot .rbc-event {
+    padding: 0;
+    border: none;
+}
+
+.rbc-event:focus {
+    outline: none;
+}
+
+.rbc-event.rbc-selected, .rbc-day-slot .rbc-selected.rbc-background-event {
+    padding: 0;
+    border: none;
+}
+
+.rbc-day-slot .rbc-events-container {
+    margin-right: 0;
 }
 
 .rbc-event.rbc-selected {

@@ -5,9 +5,11 @@ import {MessagesPanelTeacher} from "@/components/messages/teacher/MessagesPanelT
 export default async function MessagesPage() {
     const user = await getSession()
 
-    if (user?.user.role == "teacher") {
+    if (user?.user.role === "teacher") {
         return <MessagesPanelTeacher user={user}/>
-    } else if (user?.user.role == "student") {
+    } else if (user?.user.role === "student") {
         return <MessagesPanelStudent user={user}/>
+    } else if (user?.user.role === "supervisor") {
+        return <div>Вы супервизор!</div>
     }
 }
