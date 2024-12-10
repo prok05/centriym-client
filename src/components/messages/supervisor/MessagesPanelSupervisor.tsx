@@ -5,9 +5,11 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import StudentList from "@/components/messages/supervisor/StudentList";
 import TeacherList from "@/components/messages/supervisor/TeacherList";
+import UserChats from "@/components/messages/supervisor/UserChats";
 
 function MessagesPanelSupervisor(props) {
     const [alignment, setAlignment] = React.useState('students');
+    const [selectedUser, setSelectedUser] = React.useState(null)
 
     const handleChange = (
         event: React.MouseEvent<HTMLElement>,
@@ -19,26 +21,42 @@ function MessagesPanelSupervisor(props) {
     return (
         <div className="flex flex-grow rounded-xl bg-white h-full border-2">
             <div className="flex flex-col w-1/3 border-r-2 relative">
-                <div className="flex justify-between items-center p-5 border-b-2">
-                    <h2 className="font-bold">Сообщения</h2>
-                </div>
-                <div className="">
+                <div className="flex justify-center mt-4 mb-4">
                     <ToggleButtonGroup
                         color="primary"
                         value={alignment}
                         exclusive
                         onChange={handleChange}
-                        aria-label="User type"
+                        aria-label="User role"
+                        size="small"
                     >
-                        <ToggleButton value="students">Ученики</ToggleButton>
-                        <ToggleButton value="teachers">Преподаватели</ToggleButton>
+                        <ToggleButton
+                            sx={{
+                                textTransform: 'none',
+                            }}
+                            className={`${
+                                alignment === "students"
+                                    ? "!bg-purple-pale !text-black hover:!bg-purple-sec"
+                                    : "bg-transparent text-black hover:bg-gray-200 hover:text-black"
+                            }`}
+                            value="students">Ученики</ToggleButton>
+                        <ToggleButton
+                            sx={{
+                                textTransform: 'none',
+                            }}
+                            className={`${
+                                alignment === "teachers"
+                                    ? "!bg-purple-pale !text-black hover:!bg-purple-sec"
+                                    : "bg-transparent text-black hover:bg-gray-200 hover:text-black"
+                            }`}
+                            value="teachers">Преподаватели</ToggleButton>
                     </ToggleButtonGroup>
                 </div>
-                {alignment === "students" && <StudentList />}
-                {alignment === "teachers" && <TeacherList />}
+                {alignment === "students" && <StudentList setSelectedUser={setSelectedUser}/>}
+                {alignment === "teachers" && <TeacherList setSelectedUser={setSelectedUser}/>}
             </div>
             <div className="w-2/3">
-
+                {selectedUser ? <UserChats selectedUser={selectedUser}/> : <div className="flex justify-center items-center h-full">Выберите пользователя</div>}
             </div>
         </div>
     );
