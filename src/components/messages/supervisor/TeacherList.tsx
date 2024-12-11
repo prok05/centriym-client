@@ -7,9 +7,11 @@ import List from "@mui/material/List";
 import Skeleton from '@mui/material/Skeleton';
 import {TextField} from "@mui/material";
 
+// @ts-ignore
 function TeacherList({setSelectedUser}) {
     const [searchQuery, setSearchQuery] = useState("");
 
+    // @ts-ignore
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
     };
@@ -28,6 +30,7 @@ function TeacherList({setSelectedUser}) {
     })
 
     const filteredTeachers = teachersQuery.data
+        // @ts-ignore
         ? teachersQuery.data.filter((teacher) =>
             `${teacher.first_name} ${teacher.last_name}`
                 .toLowerCase()
@@ -95,6 +98,7 @@ function TeacherList({setSelectedUser}) {
                 overflow: 'auto',
             }}>
                 {filteredTeachers.length > 0 ? (
+                    // @ts-ignore
                     filteredTeachers.map((teacher) => (
                         <ListItem key={teacher.id}>
                             <ListItemButton onClick={() => setSelectedUser(teacher)}>

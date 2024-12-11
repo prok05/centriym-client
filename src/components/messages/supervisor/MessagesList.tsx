@@ -1,10 +1,13 @@
 import React from 'react';
 import moment from 'moment'
 
+// @ts-ignore
 function MessagesList({participants, selectedUserID, chatID, messages}) {
     return (
         <div className="flex flex-col gap-2 overflow-auto">
+            {/*@ts-ignore*/}
             {messages.map((message) => {
+                // @ts-ignore
                 const sender = participants.find((p) => p.user_id === message.sender_id);
                 const isCurrentUser = message.sender_id === selectedUserID;
 

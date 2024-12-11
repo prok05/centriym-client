@@ -24,7 +24,7 @@ export function Header() {
     };
 
     const {user, error, isLoading} = useUser();
-    const firstName = user?.name.split(" ")[1]
+    const firstName = user?.name?.split(" ")[1] || user?.first_name
 
     const iconStyles: SxProps = {
         color: "#702DFF",

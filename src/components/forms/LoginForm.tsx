@@ -55,8 +55,6 @@ export default function LoginForm() {
                 "password": formData.get("password")
             }
 
-            console.log(data)
-
             const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/login`, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -74,7 +72,7 @@ export default function LoginForm() {
                 case 500:
                     throw new Error("Произошла ошибка на сервере. Повторите попытку позже.")
                 case 200:
-                    console.log('success')
+                    setIsLoading(false)
                     router.push("/dashboard")
                     break
             }
@@ -196,7 +194,6 @@ export default function LoginForm() {
                         variant="contained"
                         disableElevation
                         loading={isLoading}
-                        loadingIndicator="Загрузка…"
                         size="large"
                         type="submit"
                         sx={{

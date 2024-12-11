@@ -16,7 +16,8 @@ export function OpenedChatStudent({selectedChat, setSelectedChat, user}) {
 
     const scrollToBottom = () => {
         if (messagesEndRef.current) {
-            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+            // @ts-ignore
+            messagesEndRef.current.scrollIntoView({behavior: 'smooth'});
         }
     };
 
@@ -26,7 +27,7 @@ export function OpenedChatStudent({selectedChat, setSelectedChat, user}) {
 
     const {data, error, isPending, refetch} = useQuery({
         queryKey: ['chat', selectedChat.id],
-        queryFn: async() => {
+        queryFn: async () => {
             const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/chats/get/${selectedChat.id}`, {
                 method: "GET",
                 credentials: "include"
@@ -65,6 +66,7 @@ export function OpenedChatStudent({selectedChat, setSelectedChat, user}) {
 
             // Добавляем новые сообщения только для текущего чата
             if (message.teacher_id === selectedChat.id) {
+                // @ts-ignore
                 setMessages((prevMessages) => [...prevMessages, message]);
             }
         };
@@ -89,6 +91,7 @@ export function OpenedChatStudent({selectedChat, setSelectedChat, user}) {
         scrollToBottom();
     }, [messages]);
 
+    // @ts-ignore
     const sendMessage = (id, messageContent: string) => {
         const trimmedMessage = messageContent.trim();
         if (!trimmedMessage || !selectedChat?.id || !user?.user?.id) {
@@ -114,7 +117,8 @@ export function OpenedChatStudent({selectedChat, setSelectedChat, user}) {
         }
     };
 
-    const sendMessageFirst = async(id, message) => {
+    // @ts-ignore
+    const sendMessageFirst = async (id, message) => {
         const body = {
             "user_id": id,
             "message": {
@@ -144,15 +148,9 @@ export function OpenedChatStudent({selectedChat, setSelectedChat, user}) {
                 </IconButton>
             </div>
             <div className="bg-gray-50 h-full flex flex-col items-center overflow-y-scroll">
-
-                {/*{!data && <EmptyMessages />}*/}
-                {/*{data && <MessageList user={user} messages={data}/>}*/}
                 {messages.length === 0 && <EmptyMessages/>}
                 {messages.length > 0 && <MessageList user={user} messages={messages}/>}
-                {/*{!data && <EmptyMessages />}*/}
-                {/*{data && <MessageList user={user} messages={data}/>}*/}
                 <div ref={messagesEndRef}/>
-                {/*<button onClick={() => console.log(data)}>Click</button>*/}
             </div>
             <div className="flex justify-center items-center bg-gray-50 pb-3 relative">
                 <TextField
@@ -161,8 +159,11 @@ export function OpenedChatStudent({selectedChat, setSelectedChat, user}) {
                     variant="outlined"
                     multiline
                     onKeyDown={(event) => {
-                        if (event.key === "Enter") {
-                            sendMessage(selectedChat.id, message)
+                        if (event.key === "Enter" && !event.ctrlKey) {
+                            event.preventDefault();
+                            sendMessage(selectedChat.id, message);
+                        } else if (event.key === "Enter" && event.ctrlKey) {
+                            setMessage((prev) => prev + "\n"); // Добавляем новую строку
                         }
                     }}
                     value={message}
@@ -172,9 +173,17 @@ export function OpenedChatStudent({selectedChat, setSelectedChat, user}) {
                     }}
                     maxRows={4}
                     sx={{
-                               minWidth: "70%",
-                               bgcolor: "white",
-                           }}
+                        minWidth: "70%",
+                        bgcolor: "white",
+                        "& .MuiOutlinedInput-root": {
+                            "&:hover fieldset": {
+                                borderColor: "#702DFF",
+                            },
+                            "&.Mui-focused fieldset": {
+                                borderColor: "#702DFF",
+                            },
+                        }
+                    }}
                 />
                 <div className="ml-7">
                     <Fab
@@ -190,10 +199,10 @@ export function OpenedChatStudent({selectedChat, setSelectedChat, user}) {
                                 sendMessageFirst(selectedChat.id, message)
                             }
                         }}
-                         sx={{
-                             bgcolor: "#702DFF",
-                         }
-                         }>
+                        sx={{
+                            bgcolor: "#702DFF",
+                        }
+                        }>
                         <SendIcon/>
                     </Fab>
                 </div>

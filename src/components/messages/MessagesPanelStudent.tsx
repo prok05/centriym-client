@@ -4,6 +4,7 @@ import ChatList from "@/components/messages/ChatList";
 import {Conversation} from "@/components/messages/Conversation";
 import {useEffect, useRef, useState} from "react";
 
+// @ts-ignore
 export function MessagesPanelStudent({user}) {
     const [selectedChat, setSelectedChat] = useState(null);
     const [selectedUser, setSelectedUser] = useState(null)

@@ -7,9 +7,11 @@ import ListItemButton from '@mui/material/ListItemButton';
 import Skeleton from "@mui/material/Skeleton";
 import {TextField} from "@mui/material";
 
+// @ts-ignore
 function StudentList({setSelectedUser}) {
     const [searchQuery, setSearchQuery] = useState("");
 
+    // @ts-ignore
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
     };
@@ -28,6 +30,7 @@ function StudentList({setSelectedUser}) {
     })
 
     const filteredStudents = studentsQuery.data
+        // @ts-ignore
         ? studentsQuery.data.filter((student) =>
             `${student.first_name} ${student.last_name}`
                 .toLowerCase()
@@ -68,7 +71,6 @@ function StudentList({setSelectedUser}) {
         </List>
     }
 
-
     return (
         <div className="overflow-auto">
             <div className="flex justify-center">
@@ -96,6 +98,7 @@ function StudentList({setSelectedUser}) {
                 overflow: 'auto',
             }}>
                 {filteredStudents.length > 0 ? (
+                    // @ts-ignore
                     filteredStudents.map((student) => (
                         <ListItem key={student.id}>
                             <ListItemButton onClick={() => setSelectedUser(student)}>

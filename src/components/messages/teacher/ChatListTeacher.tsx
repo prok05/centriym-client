@@ -48,7 +48,6 @@ export default function ChatListTeacher({setSelectedChat, user}) {
     return (
         <div>
             {/*@ts-ignore*/}
-            {/*<button onClick={() => console.log(data)}>Click</button>*/}
             {data.map((chat) => {
                 return <ChatListItemTeacher
                     user={user}

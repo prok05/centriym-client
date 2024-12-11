@@ -7,11 +7,15 @@ import ListItemText from "@mui/material/ListItemText";
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import MessagesDialog from "@/components/messages/supervisor/MessagesDialog";
+import CircularProgress from '@mui/material/CircularProgress';
 
+// @ts-ignore
 function UserChats({selectedUser}) {
     const [open, setOpen] = React.useState(false);
 
+    // @ts-ignore
     const showParticipant = (participants) => {
+    // @ts-ignore
         const p = participants.filter((participant) => participant.user_id != selectedUser.id);
         return `${p[0].first_name} ${p[0].last_name}`
     }
@@ -30,16 +34,18 @@ function UserChats({selectedUser}) {
     })
 
     if (chatsQuery.isFetching) {
-        return <div>loading...</div>
+        return <div className="h-full flex justify-center items-center"><CircularProgress color="secondary"/></div>
     }
 
     return (
         <div className="p-4 pt-8 h-full">
-            <Typography align="center" variant="h6">Пользователь: {selectedUser.first_name} {selectedUser.last_name}</Typography>
-            <Divider sx={{mt: "25px"}} />
+            <Typography align="center"
+                        variant="h6">Пользователь: {selectedUser.first_name} {selectedUser.last_name}</Typography>
+            <Divider sx={{mt: "25px"}}/>
             {chatsQuery.data.length
                 ?
                 <List>
+                    {/*@ts-ignore*/}
                     {chatsQuery.data.map((chat) => {
                         return <ListItem>
                             <ListItemButton onClick={() => setOpen(true)}>

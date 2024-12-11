@@ -29,21 +29,18 @@ export function SelectRole() {
                         sx={{
                             backgroundColor: "white",
                             '&.MuiOutlinedInput-root': {
-                                // '& fieldset': {
-                                //     borderColor: '#702DFF', // <------------------ outline-color by default
-                                // },
                                 '&:hover fieldset': {
-                                    borderColor: '#702DFF', // <------------------ outline-color on hover
+                                    borderColor: '#702DFF',
                                 },
                                 '&.Mui-focused fieldset': {
-                                    borderColor: '#702DFF', // <------------------ outline-color on focus
+                                    borderColor: '#702DFF',
                                 },
                             },
                         }}
                     >
                         <MenuItem value="student">Ученик</MenuItem>
                         <MenuItem value="teacher">Преподаватель</MenuItem>
-                        <MenuItem value="supervisor">Методист</MenuItem>
+                        {/*<MenuItem value="supervisor">Методист</MenuItem>*/}
                     </Select>
                 </FormControl>
             </Box>

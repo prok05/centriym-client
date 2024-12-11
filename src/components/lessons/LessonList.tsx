@@ -10,6 +10,7 @@ import {keepPreviousData, useQuery} from "@tanstack/react-query";
 import {useInnerUserStore} from "@/store/innerUserStore";
 
 
+// @ts-ignore
 export function LessonList({user}) {
     const userID = useUserID()
     const innerUser = useInnerUserStore((state) => state.innerUser);

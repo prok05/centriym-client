@@ -6,7 +6,10 @@ export default function ChatListItemTeacher({chat, setSelectedChat, user}) {
         setSelectedChat(chat)
     }
 
+
+    // @ts-ignore
     const showChatSender = (participants, min) => {
+        // @ts-ignore
         const participant = participants.find((p) => p.user_id !== user.user.id);
         if (min) {
             return `${participant.first_name[0]}${participant.last_name[0]}`

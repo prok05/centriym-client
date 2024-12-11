@@ -1,9 +1,9 @@
-import {getSession} from "@/utils/getSession";
 
+
+// @ts-ignore
 function MessageList({messages, user}) {
 
-
-
+    // @ts-ignore
     const Message = ({user, message}) => {
         if (message.sender_id === user.user.id) {
             return (
@@ -20,8 +20,10 @@ function MessageList({messages, user}) {
         }
     }
 
+
     return (
         <div className="flex flex-col py-6 w-4/5">
+            {/*@ts-ignore*/}
             {messages.map((message) => (
                 <Message key={message.id} user={user} message={message}/>
             ))}

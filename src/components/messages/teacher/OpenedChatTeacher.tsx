@@ -15,6 +15,7 @@ export function OpenedChatTeacher({selectedChat, setSelectedChat, user}) {
 
     const scrollToBottom = () => {
         if (messagesEndRef.current) {
+            // @ts-ignore
             messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     };
@@ -54,6 +55,7 @@ export function OpenedChatTeacher({selectedChat, setSelectedChat, user}) {
 
             // Добавляем новые сообщения только для текущего чата
             if (message.chat_id === selectedChat.id) {
+                // @ts-ignore
                 setMessages((prevMessages) => [...prevMessages, message]);
             }
         };
@@ -101,48 +103,6 @@ export function OpenedChatTeacher({selectedChat, setSelectedChat, user}) {
         }
     };
 
-
-
-    // const sendMessage = async(id, message) => {
-    //     const trimmedMessage = message.trim()
-    //     const body = {
-    //         "user_id": id,
-    //         "message": {
-    //             "content": trimmedMessage,
-    //             "chat_id": selectedChat.id,
-    //             "sender_id": user.user.id
-    //         }
-    //     }
-    //     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/messages`, {
-    //         method: "POST",
-    //         credentials: "include",
-    //         body: JSON.stringify(body)
-    //     });
-    //     if (response.status == 201) {
-    //         setMessage('')
-    //     }
-    // }
-
-    // const sendMessageMutation = useMutation({
-    //     mutationKey: ["send-message"],
-    //     mutationFn: (variables: {message: string, chatID: number, userID: number}) => {
-    //         const trimmedMessage = variables.message.trim()
-    //         const body = {
-    //             "user_id": 0,
-    //             "message": {
-    //                 "content": trimmedMessage,
-    //                 "chat_id": variables.chatID,
-    //                 "sender_id": variables.userID
-    //             }
-    //         }
-    //         return
-    //     },
-    //     onSuccess() {
-    //
-    //         setMessage('')
-    //     }
-    // })
-
     return (
         <div className="flex flex-col h-full relative">
             <div className="py-3 px-6 flex justify-between items-center border-b-2">
@@ -154,13 +114,8 @@ export function OpenedChatTeacher({selectedChat, setSelectedChat, user}) {
                 </IconButton>
             </div>
             <div className="bg-gray-50 h-full flex flex-col items-center overflow-y-scroll">
-
                 {messages.length === 0 && <EmptyMessages/>}
                 {messages.length > 0 && <MessageList user={user} messages={messages}/>}
-                {/*{!data && <EmptyMessages />}*/}
-                {/*{data && <MessageList user={user} messages={data}/>}*/}
-
-                {/*<button onClick={() => console.log(data)}>Click</button>*/}
                 <div ref={messagesEndRef}/>
             </div>
             <div className="flex justify-center items-center bg-gray-50 pb-3 relative">
@@ -171,8 +126,11 @@ export function OpenedChatTeacher({selectedChat, setSelectedChat, user}) {
                     value={message}
                     placeholder={'Напишите сообщение'}
                     onKeyDown={(event) => {
-                        if (event.key === "Enter") {
-                            sendMessage(message)
+                        if (event.key === "Enter" && !event.ctrlKey) {
+                            event.preventDefault();
+                            sendMessage(message);
+                        } else if (event.key === "Enter" && event.ctrlKey) {
+                            setMessage((prev) => prev + "\n"); // Добавляем новую строку
                         }
                     }}
                     onChange={(event) => setMessage(event.target.value)}
@@ -180,6 +138,14 @@ export function OpenedChatTeacher({selectedChat, setSelectedChat, user}) {
                     sx={{
                         minWidth: "70%",
                         bgcolor: "white",
+                        "& .MuiOutlinedInput-root": {
+                            "&:hover fieldset": {
+                                borderColor: "#702DFF",
+                            },
+                            "&.Mui-focused fieldset": {
+                                borderColor: "#702DFF",
+                            },
+                        }
                     }}
                 />
                 <div className="ml-7">

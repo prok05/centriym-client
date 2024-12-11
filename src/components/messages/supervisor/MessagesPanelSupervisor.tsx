@@ -7,6 +7,7 @@ import StudentList from "@/components/messages/supervisor/StudentList";
 import TeacherList from "@/components/messages/supervisor/TeacherList";
 import UserChats from "@/components/messages/supervisor/UserChats";
 
+// @ts-ignore
 function MessagesPanelSupervisor(props) {
     const [alignment, setAlignment] = React.useState('students');
     const [selectedUser, setSelectedUser] = React.useState(null)

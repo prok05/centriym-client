@@ -4,6 +4,7 @@ import {useEffect, useRef, useState} from "react";
 import ChatListTeacher from "@/components/messages/teacher/ChatListTeacher";
 import {ConversationTeacher} from "@/components/messages/teacher/ConversationTeacher";
 
+// @ts-ignore
 export function MessagesPanelTeacher({user}) {
     const [selectedChat, setSelectedChat] = useState(null);
     const socket = useRef<WebSocket | null>()

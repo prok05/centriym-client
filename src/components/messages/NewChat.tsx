@@ -3,7 +3,6 @@ import {Suspense, useEffect, useState} from "react";
 import {CircularProgress} from "@mui/material";
 import {teachersResource} from "@/resources/resources";
 import {useInnerUserStore} from "@/store/innerUserStore";
-import {InnerUserI} from "@/lib/types";
 
 // @ts-ignore
 export default function NewChat({setIsCreatingChat, setSelectedUser}) {

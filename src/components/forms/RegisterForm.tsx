@@ -77,10 +77,6 @@ export default function RegisterForm() {
                 "password": password,
             }
 
-
-
-            console.log(data)
-
             const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/register`, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -98,6 +94,7 @@ export default function RegisterForm() {
                     throw new Error("Пользователь с таким номера телефона уже зарегистрирован.")
                 case 201:
                 {
+                    setIsLoading(false);
                     setIsRegisterOk(true)
                     await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/login`, {
                         headers: {
@@ -137,8 +134,6 @@ export default function RegisterForm() {
                             label="Телефон"
                             fullWidth
                             name="phone"
-                            // defaultCountry="RU"
-                            // forceCallingCode
                             getFlagElement={(isoCode, { imgProps, countryName, isSelected }) => {
                                 return <LocalPhoneIcon />
                             }}
@@ -240,8 +235,6 @@ export default function RegisterForm() {
                                         <IconButton
                                             aria-label="toggle password visibility"
                                             onClick={handleClickShowPasswordConfirm}
-                                            // onMouseDown={handleMouseDownPassword}
-                                            // onMouseUp={handleMouseUpPassword}
                                             edge="end"
                                         >
                                             {showPasswordConfirm ? <VisibilityOff /> : <Visibility />}
@@ -280,7 +273,6 @@ export default function RegisterForm() {
                             variant="contained"
                             disableElevation
                             loading={isLoading}
-                            loadingIndicator="Загрузка…"
                             size="large"
                             fullWidth
                             type="submit"

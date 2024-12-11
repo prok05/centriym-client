@@ -44,6 +44,7 @@ function LessonRating() {
         queryFn: getLessonRates,
     })
 
+    // @ts-ignore
     const columns = useMemo(() => [
         {field: "number",
             headerName: "№",
@@ -57,6 +58,7 @@ function LessonRating() {
         {field: "rate",
             headerName: "Оценка",
             minWidth: 200,
+            // @ts-ignore
             renderCell: (p) => <Rating value={p.row.rate} readOnly size={"small"} />,
             hideable: false,
             disableReorder: true,
@@ -64,6 +66,7 @@ function LessonRating() {
         },
         {field: "lesson_date",
             headerName: "Дата урока",
+            // @ts-ignore
             renderCell: (p) => p.row.lesson_date.format("DD.MM.YYYY HH:mm"),
             minWidth: 250,
             hideable: false,
@@ -87,6 +90,7 @@ function LessonRating() {
         },
         {field: "lesson_link",
             headerName: "Ссылка на урок",
+            // @ts-ignore
             renderCell: p => <a className={"text-purple-main"} href={p.row.lesson_link} target="_blank">Ссылка</a>,
             filterable: false,
             sortable: false,
