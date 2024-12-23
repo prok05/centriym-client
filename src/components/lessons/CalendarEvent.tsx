@@ -171,11 +171,13 @@ export function CalendarEvent({event, view, user}) {
                     </Typography>
 
                 </DialogContent>
-                <DialogActions>
+                <DialogActions className={user.user.role === "teacher" ? "flex justify-between" : ""}>
+                    {user.user.role === "teacher" && <ColorButton variant="contained">Задать ДЗ</ColorButton>}
                     <EnterLessonBtn/>
                 </DialogActions>
             </BootstrapDialog>
 
+            {/*оценка уроков учеником*/}
             <BootstrapDialog
                 onClose={handleRatingClose}
                 aria-labelledby="rating-dialog"
@@ -231,9 +233,6 @@ export function CalendarEvent({event, view, user}) {
                     open={openRateSuccess}
                     onClose={() => setOpenRateSuccess(false)}
                     anchorOrigin={{vertical: "bottom", horizontal: "right"}}
-                    // TransitionComponent={state.Transition}
-                    // message="I love snacks"
-                    // key={state.Transition.name}
                     autoHideDuration={2000}
                     TransitionComponent={Slide}
                     sx={{
