@@ -27,7 +27,7 @@ const BootstrapDialog = styled(Dialog)(({theme}) => ({
 }));
 
 // @ts-ignore
-function HomeworkListItemTeacher({lesson}) {
+function HomeworkListItemTeacher({homework}) {
     const [open, setOpen] = React.useState(false);
 
     const handleClickOpen = () => {
@@ -47,11 +47,11 @@ function HomeworkListItemTeacher({lesson}) {
         }
     }
 
-    const {data, error, isPending, refetch} = useQuery({
-        queryKey: ['homework-count', lesson.id],
-        queryFn: () => getCountHomeworkWithStatus(lesson.teacher_ids[0], lesson.id, 2),
-        enabled: !!lesson,
-    })
+    // const {data, error, isPending, refetch} = useQuery({
+    //     queryKey: ['homework-count', lesson.id],
+    //     queryFn: () => getCountHomeworkWithStatus(lesson.teacher_ids[0], lesson.id, 2),
+    //     enabled: !!lesson,
+    // })
 
     // @ts-ignore
     const getCountHomeworkWithStatus = async (teacherID, lessonID, status) => {
@@ -72,17 +72,17 @@ function HomeworkListItemTeacher({lesson}) {
 
     return (
         <React.Fragment>
-            <div key={lesson.id}
+            <div key={homework.id}
                  className="flex justify-between items-center p-4 border border-slate-200 rounded">
                 <div className="flex flex-col w-4/5">
                     <Typography
-                        variant="h5">{getSubjectName(lesson.subject_id)}: {moment(lesson.date).format("dddd, DD MMMM")}</Typography>
+                        variant="h5">{homework.subject_title}: {moment(homework.lesson_date).format("dddd, DD MMMM")}</Typography>
                     <Divider sx={{mb: 1}} />
-                    <Typography variant="body1">Тема: {lesson.topic}</Typography>
+                    <Typography variant="body1">Тема: {homework.lesson_topic ? homework.lesson_topic : "-"}</Typography>
                 </div>
-                <div>{HomeworkStatus(lesson.homework_status)}</div>
+                {/*<div>{HomeworkStatus(lesson.homework_status)}</div>*/}
                 <div>
-                    <Badge badgeContent={data && data.count} color="primary">
+                    <Badge badgeContent={homework.under_review_count && homework.under_review_count} color="primary">
                         <Button
                             onClick={handleClickOpen}
                             variant="contained"
@@ -96,45 +96,45 @@ function HomeworkListItemTeacher({lesson}) {
 
                 </div>
             </div>
-            <BootstrapDialog
-                onClose={handleClose}
-                aria-labelledby="customized-dialog-title"
-                open={open}
-                fullWidth
-            >
-                <div className="flex justify-between">
-                    <DialogTitle sx={{m: 0, p: 2}} id="customized-dialog-title">
-                        {getSubjectName(lesson.subject_id)}
-                    </DialogTitle>
-                    <IconButton
-                        aria-label="close"
-                        onClick={handleClose}
-                        sx={(theme) => ({
-                            color: theme.palette.grey[500],
-                        })}
-                    >
-                        <CloseIcon/>
-                    </IconButton>
-                </div>
-                <DialogContent dividers>
-                    <Typography gutterBottom>
-                        <b>Содержание ДЗ</b>
-                    </Typography>
-                    <Typography gutterBottom>
-                        {lesson.homework}
-                    </Typography>
-                </DialogContent>
-                {lesson.homework_status !== 3 && <DialogContent dividers>
-                    <Typography gutterBottom>
-                        <b>Загруженные ДЗ</b>
-                        <LoadedFilesListTeacher lesson={lesson} />
-                    </Typography>
-                </DialogContent>}
+            {/*<BootstrapDialog*/}
+            {/*    onClose={handleClose}*/}
+            {/*    aria-labelledby="customized-dialog-title"*/}
+            {/*    open={open}*/}
+            {/*    fullWidth*/}
+            {/*>*/}
+            {/*    <div className="flex justify-between">*/}
+            {/*        <DialogTitle sx={{m: 0, p: 2}} id="customized-dialog-title">*/}
+            {/*            {getSubjectName(lesson.subject_id)}*/}
+            {/*        </DialogTitle>*/}
+            {/*        <IconButton*/}
+            {/*            aria-label="close"*/}
+            {/*            onClick={handleClose}*/}
+            {/*            sx={(theme) => ({*/}
+            {/*                color: theme.palette.grey[500],*/}
+            {/*            })}*/}
+            {/*        >*/}
+            {/*            <CloseIcon/>*/}
+            {/*        </IconButton>*/}
+            {/*    </div>*/}
+            {/*    <DialogContent dividers>*/}
+            {/*        <Typography gutterBottom>*/}
+            {/*            <b>Содержание ДЗ</b>*/}
+            {/*        </Typography>*/}
+            {/*        <Typography gutterBottom>*/}
+            {/*            {lesson.homework}*/}
+            {/*        </Typography>*/}
+            {/*    </DialogContent>*/}
+            {/*    {lesson.homework_status !== 3 && <DialogContent dividers>*/}
+            {/*        <Typography gutterBottom>*/}
+            {/*            <b>Загруженные ДЗ</b>*/}
+            {/*            <LoadedFilesListTeacher lesson={lesson} />*/}
+            {/*        </Typography>*/}
+            {/*    </DialogContent>}*/}
 
-                {/*<DialogActions>*/}
-                {/*    <UploadHomeworkBtn lesson={item} />*/}
-                {/*</DialogActions>*/}
-            </BootstrapDialog>
+            {/*    /!*<DialogActions>*!/*/}
+            {/*    /!*    <UploadHomeworkBtn lesson={item} />*!/*/}
+            {/*    /!*</DialogActions>*!/*/}
+            {/*</BootstrapDialog>*/}
         </React.Fragment>
     );
 }

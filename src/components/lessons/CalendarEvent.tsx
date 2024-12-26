@@ -16,6 +16,9 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 import Slide from '@mui/material/Slide';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import HomeworkAssign from "@/components/lessons/ teacher/HomeworkAssign";
+import {getStartAndEndDate} from "@/utils/utils";
+import {keepPreviousData, useQuery} from "@tanstack/react-query";
 
 moment.locale("ru");
 
@@ -55,6 +58,23 @@ export function CalendarEvent({event, view, user}) {
     const [rateHover, setRateHover] = React.useState(-1);
     const [openRateSuccess, setOpenRateSuccess] = React.useState(false);
     const [openRateFail, setOpenRateFail] = React.useState(false);
+
+    const getHomework = async (lessonID) => {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/homework/${lessonID}`, {
+            method: "GET",
+            credentials: "include"
+        })
+        if (!response.ok) {
+            throw new Error('Не смогли получить дз')
+        }
+        return response.json()
+    }
+
+    const {data: homeworkInfo, error: homeworkError, isPending: homeworkPending} = useQuery({
+        queryKey: ['homework-in-lesson', {lesson: event.id}],
+        queryFn: () => getHomework(event.id),
+        enabled: Boolean(open),
+    })
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -105,7 +125,6 @@ export function CalendarEvent({event, view, user}) {
     }
 
     const sendRating = async () => {
-        console.log(event)
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/lessons/rating`, {
             method: "POST",
             credentials: "include",
@@ -139,43 +158,50 @@ export function CalendarEvent({event, view, user}) {
                 <div className="text-xs text-gray-700 text-center px-1">{event.title}</div>
                 <div className="text-xs text-gray-700 text-center px-1">{event.hourStart} - {event.hourEnd}</div>
             </div>
-            <BootstrapDialog
+            <Dialog
                 onClose={handleClose}
-                aria-labelledby="customized-dialog-title"
+                aria-labelledby="lesson-info-dialog"
                 open={open}
                 fullWidth
             >
-                <div className="flex justify-between">
-                    <DialogTitle sx={{m: 0, p: 2}} id="customized-dialog-title">
+                <div className="flex items-center justify-between">
+                    <DialogTitle sx={{m: 0, p: 2}} id="lesson-info-dialog-title">
                         {event.title}. {moment(event.start).format("dddd, HH:mm")}
                     </DialogTitle>
-                    <IconButton
-                        aria-label="close"
-                        onClick={handleClose}
-                        sx={(theme) => ({
-                            color: theme.palette.grey[500],
-                        })}
-                    >
-                        <CloseIcon/>
-                    </IconButton>
+                    <div className="mr-2">
+                        <IconButton
+                            aria-label="close"
+                            onClick={handleClose}
+                            sx={(theme) => ({
+                                color: theme.palette.grey[500],
+                            })}
+                        >
+                            <CloseIcon/>
+                        </IconButton>
+                    </div>
                 </div>
                 <DialogContent dividers>
                     <Typography gutterBottom>
                         <b>Тема</b>: {event.topic ? event.topic : "—"}
                     </Typography>
                     <Typography gutterBottom>
-                        <b>Домашняя работа</b>: {event.homework ? event.homework : "—"}
+                        {/*<b>Домашнее задание</b>: {event.homework ? event.homework : "—"}*/}
+                        <b>Домашнее задание</b>: {homeworkInfo ? homeworkInfo.description : "не задано"}
                     </Typography>
                     <Typography gutterBottom>
                         <b>Комментарий к уроку</b>: {event.note ? <i>{event.note}</i> : "—"}
                     </Typography>
 
                 </DialogContent>
-                <DialogActions className={user.user.role === "teacher" ? "flex justify-between" : ""}>
-                    {user.user.role === "teacher" && <ColorButton variant="contained">Задать ДЗ</ColorButton>}
+                <DialogActions sx={{
+                    padding: 2,
+                    display: user.user.role === "teacher" ? "flex" : "block",
+                    justifyContent: user.user.role === "teacher" ? "space-between" : "initial"
+                }}>
+                    {user.user.role === "teacher" && <HomeworkAssign event={event}/>}
                     <EnterLessonBtn/>
                 </DialogActions>
-            </BootstrapDialog>
+            </Dialog>
 
             {/*оценка уроков учеником*/}
             <BootstrapDialog
@@ -184,7 +210,7 @@ export function CalendarEvent({event, view, user}) {
                 open={openRating}
             >
                 <div className="flex justify-between">
-                    <DialogTitle sx={{m: 0, p: 2}} id="customized-dialog-title">
+                    <DialogTitle sx={{m: 0, p: 2}} id="rating-dialog-title">
                         Как прошел урок?
                     </DialogTitle>
                     <IconButton

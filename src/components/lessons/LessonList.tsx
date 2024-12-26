@@ -13,16 +13,13 @@ import {useInnerUserStore} from "@/store/innerUserStore";
 // @ts-ignore
 export function LessonList({user}) {
     const userID = useUserID()
-    const innerUser = useInnerUserStore((state) => state.innerUser);
-    const lessons = useLessonStore((state) => state.lessons);
-    const setLessons = useLessonStore((state) => state.setLessons);
     const [date, setDate] = useState<Date>(moment().toDate());
 
     const {data: userInfo, error: userError, isPending: userPending} = useQuery({
-        queryKey: ['userInfo', date],
+        queryKey: ['userInfo'],
         queryFn: () => getUser(userID),
         enabled: Boolean(userID),
-        placeholderData: keepPreviousData
+        // placeholderData: keepPreviousData,
     })
 
     // @ts-ignore
@@ -37,6 +34,14 @@ export function LessonList({user}) {
         }
         return response.json()
     }
+
+    const {data, isPlaceholderData, isPending} = useQuery({
+        queryKey: ['lessons', date],
+        queryFn: () => getLessons(userID, date, userInfo),
+        // enabled: !!userID && innerUser,
+        enabled: Boolean(userInfo),
+        placeholderData: keepPreviousData
+    })
 
     // @ts-ignore
     const getLessons = async (id, date, user) => {
@@ -70,16 +75,9 @@ export function LessonList({user}) {
             throw new Error('Не смогли получить уроки')
         }
         return response.json()
-
     }
 
-    const {data, isPlaceholderData, isPending} = useQuery({
-        queryKey: ['lessons', date],
-        queryFn: () => getLessons(userID, date, userInfo),
-        // enabled: !!userID && innerUser,
-        enabled: Boolean(userInfo),
-        placeholderData: keepPreviousData
-    })
+
 
     return (
         <div className="flex flex-col h-full">

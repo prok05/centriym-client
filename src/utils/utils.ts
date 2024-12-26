@@ -46,7 +46,8 @@ export const getEventsFromLessons = (lessons) => {
                 end: moment(lesson.time_to).toDate(),
                 hourStart: moment(lesson.time_from).format("HH:mm"),
                 hourEnd: moment(lesson.time_to).format("HH:mm"),
-                teacherIDs: lesson.teacher_ids
+                teacherIDs: lesson.teacher_ids,
+                customerIDs: lesson.customer_ids,
             }
         })
     }

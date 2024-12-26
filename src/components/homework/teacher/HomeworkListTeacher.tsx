@@ -11,39 +11,19 @@ import HomeworkListItemTeacher from "@/components/homework/teacher/HomeworkListI
 
 // @ts-ignore
 const HomeworkListTeacher = () => {
-    const userID = useUserID();
-    const [date, setDate] = useState<Date>(moment().toDate());
-
     const {data, error, isPending, refetch} = useQuery({
         queryKey: ['homework'],
-        queryFn: () => getLessonsWithHomeWork(userID, date),
-        enabled: !!userID,
+        queryFn: () => getLessonsWithHomeWork(),
     })
 
     // @ts-ignore
-    const getLessonsWithHomeWork = async (userID, date) => {
-        let [start, end] = getStartAndEndDate(date)
-
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/lessons/teacher`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                "teacher_id": userID,
-                "date_from": start,
-                "date_to": end,
-                "page": 0
-            })
+    const getLessonsWithHomeWork = async () => {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/homework/teacher`, {
+            method: "GET",
+            credentials: "include",
         });
 
-        const data = await response.json();
-        const filteredLessons = data.items.filter((lesson: {
-            homework: string
-        }) => lesson.homework && lesson.homework.trim() !== "");
-
-        // @ts-ignore
-        return filteredLessons as Promise
+        return await response.json()
     };
 
     if (isPending) {
@@ -64,6 +44,8 @@ const HomeworkListTeacher = () => {
         return <div>Не удалось загрузить домашние задания</div>
     }
 
+    console.log(data)
+
     return (
         <div className="flex flex-col h-full">
             <div className="h-full">
@@ -71,8 +53,8 @@ const HomeworkListTeacher = () => {
                 {!data.length && <div>Нет домашних заданий</div>}
                 <Stack spacing={3}>
                     {/*@ts-ignore*/}
-                    {data.map((lesson) => (
-                        <HomeworkListItemTeacher key={lesson.id} lesson={lesson}/>
+                    {data.map((homework) => (
+                        <HomeworkListItemTeacher key={homework.id} homework={homework}/>
                     ))}
                 </Stack>
             </div>

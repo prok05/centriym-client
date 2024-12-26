@@ -14,6 +14,7 @@ import LessonHelpTooltip from "@/components/lessons/LessonHelpTooltip";
 import React from 'react';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import {useQueryClient} from "@tanstack/react-query";
 
 
 const localizer = momentLocalizer(moment)
@@ -88,6 +89,8 @@ export function LessonCalendar({date, setDate, data, isPlaceholderData, isPendin
         console.info('[handleSelected - event]', event);
     };
 
+    const queryClient = useQueryClient();
+
     return (
         <div className="h-full flex flex-col">
             <div className="relative">
@@ -101,7 +104,7 @@ export function LessonCalendar({date, setDate, data, isPlaceholderData, isPendin
 
                         <LessonHelpTooltip title={
                             <React.Fragment>
-                                <div className="flex flex-col">
+                            <div className="flex flex-col">
                                     <div className="bg-gray-200 p-2">Прошедший урок</div>
                                     <div className="bg-red-200 p-2">Отмененный урок</div>
                                     <div className="bg-green-200 p-2">Запланированный урок</div>
@@ -123,6 +126,7 @@ export function LessonCalendar({date, setDate, data, isPlaceholderData, isPendin
                         >
                             {VIEW_OPTIONS.map(({ id, label }) => (
                                 <ToggleButton
+                                    key={id}
                                     value={label}
                                     onClick={() => setView(id)}
                                     sx={{textTransform: 'capitalize'}}
