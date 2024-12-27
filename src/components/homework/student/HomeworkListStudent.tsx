@@ -65,6 +65,7 @@ const HomeworkListStudent = () => {
             <div className="h-full">
 
                 <Stack spacing={3}>
+                    {!data.length && <div>Нет домашних заданий</div>}
                     {/*@ts-ignore*/}
                     {data.map((homework) => (
                         <HomeworkListItemStudent key={homework.id} homework={homework}/>

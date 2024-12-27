@@ -50,6 +50,7 @@ function SolutionListTeacher({homework}) {
         }
     }
 
+    // @ts-ignore
     const handleDownLoadFile = (id, file, studentName) => {
         fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/homework/file/${id}/download`, {
             method: 'GET',

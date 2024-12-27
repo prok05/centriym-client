@@ -104,6 +104,7 @@ function HomeworkListItemStudent({homework}) {
 
         if (res.status === 201) {
             await queryClient.invalidateQueries({queryKey: ['solution', homework.id]})
+            await queryClient.invalidateQueries({queryKey: ['homeworks']})
             setIsLoading(false)
             setFiles([])
             setSolution('')
@@ -112,6 +113,7 @@ function HomeworkListItemStudent({homework}) {
         }
     };
 
+    // @ts-ignore
     const handleDownLoadTeacherFile = (fileID) => {
         fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/homework/teacher/file/${fileID}/download`, {
             method: 'GET',
@@ -147,6 +149,7 @@ function HomeworkListItemStudent({homework}) {
                 console.error('Error downloading file:', error);
             });
     }
+
 
     return (
         <React.Fragment>
@@ -200,7 +203,7 @@ function HomeworkListItemStudent({homework}) {
                             {homework.description}
                         </Typography>
                     </div>
-
+                    {/*@ts-ignore*/}
                     {homework.files.length > 0 && homework.files.map((file) => {
                         return (
                             <div
@@ -229,7 +232,7 @@ function HomeworkListItemStudent({homework}) {
                             {isPendingSolution ? '...' : data.solution}
                         </Typography>
                         {isPendingSolution ? null :
-                            <LoadedFilesListStudent files={data.files} homeworkID={homework.id}/>}
+                            <LoadedFilesListStudent homeworkStatus={homework.status} files={data.files} homeworkID={homework.id}/>}
 
                     </div>
                 </DialogContent>

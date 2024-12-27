@@ -7,7 +7,7 @@ import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import AttachFileRoundedIcon from "@mui/icons-material/AttachFileRounded";
 
 // @ts-ignore
-function LoadedFilesListStudent({files, homeworkID}) {
+function LoadedFilesListStudent({files, homeworkID, homeworkStatus}) {
     const queryClient = useQueryClient();
 
     // @ts-ignore
@@ -73,7 +73,7 @@ function LoadedFilesListStudent({files, homeworkID}) {
                         <Typography variant='subtitle2'><AttachFileRoundedIcon fontSize='small'/> {file.file_name}</Typography>
                         <div>
                             <IconButton onClick={() => handleDownLoadFile(file.id)}><DownloadRoundedIcon/></IconButton>
-                            <IconButton onClick={() => handleDeleteFile(file.id)}><DeleteIcon/></IconButton>
+                            {homeworkStatus !== 1 && <IconButton onClick={() => handleDeleteFile(file.id)}><DeleteIcon/></IconButton>}
                         </div>
                     </div>
                 ))

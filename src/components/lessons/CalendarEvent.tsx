@@ -59,6 +59,7 @@ export function CalendarEvent({event, view, user}) {
     const [openRateSuccess, setOpenRateSuccess] = React.useState(false);
     const [openRateFail, setOpenRateFail] = React.useState(false);
 
+    // @ts-ignore
     const getHomework = async (lessonID) => {
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/homework/${lessonID}`, {
             method: "GET",

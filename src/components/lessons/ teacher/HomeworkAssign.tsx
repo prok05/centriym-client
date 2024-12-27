@@ -21,20 +21,9 @@ import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import Snackbar from "@mui/material/Snackbar";
 import { VisuallyHiddenInput } from '@/components/ui/VisuallyHiddenInput';
 
-// const VisuallyHiddenInput = styled('input')({
-//     clip: 'rect(0 0 0 0)',
-//     clipPath: 'inset(50%)',
-//     height: 1,
-//     overflow: 'hidden',
-//     position: 'absolute',
-//     bottom: 0,
-//     left: 0,
-//     whiteSpace: 'nowrap',
-//     width: 1,
-// });
-
 type FileState = File[];
 
+// @ts-ignore
 function HomeworkAssign({event}) {
     const [description, setDescription] = useState<string>('')
     const [open, setOpen] = React.useState(false);

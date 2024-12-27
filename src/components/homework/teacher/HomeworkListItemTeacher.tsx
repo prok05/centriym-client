@@ -46,6 +46,7 @@ function HomeworkListItemTeacher({homework}) {
         return response.json()
     }
 
+    // @ts-ignore
     const handleDownLoadTeacherFile = (fileID) => {
         fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/homework/teacher/file/${fileID}/download`, {
             method: 'GET',
@@ -134,6 +135,7 @@ function HomeworkListItemTeacher({homework}) {
                     <Typography gutterBottom>
                         {homework.description}
                     </Typography>
+                    {/*@ts-ignore*/}
                     {teacherFiles && teacherFiles.map((file) => {
                         return (
                             <div
