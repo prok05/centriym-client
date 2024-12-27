@@ -26,40 +26,20 @@ moment.locale("ru");
 
 // @ts-ignore
 const HomeworkListStudent = () => {
-    const userID = useUserID();
-    const [date, setDate] = useState<Date>(moment().toDate());
-
     const {data, error, isPending, refetch} = useQuery({
-        queryKey: ['homework'],
-        queryFn: () => getLessonsWithHomeWork(userID, date),
-        enabled: !!userID,
+        queryKey: ['homeworks'],
+        queryFn: () => fetchHomeworks(),
         staleTime: 1000
     })
 
     // @ts-ignore
-    const getLessonsWithHomeWork = async (userID, date) => {
-        let [start, end] = getStartAndEndDate(date)
-
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/lessons/homework/student`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                "customer_id": userID,
-                "date_from": start,
-                "date_to": end,
-                "page": 0
-            })
+    const fetchHomeworks = async () => {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/homework/student`, {
+            method: "GET",
+            credentials: "include",
         });
 
-        const data = await response.json();
-        const filteredLessons = data.items.filter((lesson: {
-            homework: string
-        }) => lesson.homework && lesson.homework.trim() !== "");
-
-        // @ts-ignore
-        return filteredLessons as Promise
+        return await response.json();
     };
 
     if (isPending) {
@@ -86,8 +66,8 @@ const HomeworkListStudent = () => {
 
                 <Stack spacing={3}>
                     {/*@ts-ignore*/}
-                    {data.map((item) => (
-                        <HomeworkListItemStudent key={item.id} item={item}/>
+                    {data.map((homework) => (
+                        <HomeworkListItemStudent key={homework.id} homework={homework}/>
                     ))}
                 </Stack>
             </div>

@@ -14,17 +14,11 @@ import UploadHomeworkBtn from "@/components/homework/student/UploadHomeworkBtn";
 import {grey} from "@mui/material/colors"
 import {useQuery} from "@tanstack/react-query";
 import LoadedFilesListStudent from "@/components/homework/student/LoadedFilesListStudent";
-import LoadedFilesListTeacher from "@/components/homework/teacher/LoadedFilesListTeacher";
+import SolutionListTeacher from "@/components/homework/teacher/SolutionListTeacher";
 import Badge from "@mui/material/Badge";
+import AttachFileRoundedIcon from "@mui/icons-material/AttachFileRounded";
+import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 
-const BootstrapDialog = styled(Dialog)(({theme}) => ({
-    '& .MuiDialogContent-root': {
-        padding: theme.spacing(2),
-    },
-    '& .MuiDialogActions-root': {
-        padding: theme.spacing(1),
-    },
-}));
 
 // @ts-ignore
 function HomeworkListItemTeacher({homework}) {
@@ -37,38 +31,56 @@ function HomeworkListItemTeacher({homework}) {
         setOpen(false);
     };
 
-    function HomeworkStatus(status: number) {
-        if (status === 3) {
-            return <Chip label={"Не сдано"} sx={{bgcolor: grey}}  />
-        } else if (status === 2) {
-            return <Chip color="info" label={"На проверке"} />
-        } else if (status === 1) {
-            return <Chip color="success" label={"Сдано"} />
-        }
-    }
-
-    // const {data, error, isPending, refetch} = useQuery({
-    //     queryKey: ['homework-count', lesson.id],
-    //     queryFn: () => getCountHomeworkWithStatus(lesson.teacher_ids[0], lesson.id, 2),
-    //     enabled: !!lesson,
-    // })
+    const {data: teacherFiles, error: teacherFilesError, isPending: teacherFilesIsPending} = useQuery({
+        queryKey: ['teacher-files', homework.id],
+        queryFn: () => fetchHomeworkTeacherFiles(homework.id),
+        enabled: open,
+    })
 
     // @ts-ignore
-    const getCountHomeworkWithStatus = async (teacherID, lessonID, status) => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/homework/teacher/count`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                "teacher_id": teacherID,
-                "lesson_id": lessonID,
-                "status": status,
-            })
+    const fetchHomeworkTeacherFiles = async (homeworkID) => {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/homework/teacher/files/${homeworkID}`, {
+            method: "GET",
+            credentials: "include"
         });
+        return response.json()
+    }
 
-        return await response.json();
-    };
+    const handleDownLoadTeacherFile = (fileID) => {
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/homework/teacher/file/${fileID}/download`, {
+            method: 'GET',
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error('Failed to download file');
+                }
+                const contentDisposition = response.headers.get('Content-Disposition');
+                let filename = `file_${fileID}.docx`;
+                if (contentDisposition) {
+                    const matches = contentDisposition.match(/filename="([^"]+)"/);
+                    if (matches && matches[1]) {
+                        filename = matches[1]; // Получаем имя файла
+                    }
+                }
+                return response.blob().then((blob) => ({blob, filename}));
+            })
+            .then(({blob, filename}) => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+
+                a.download = filename;
+
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+            })
+            .catch((error) => {
+                console.error('Error downloading file:', error);
+            });
+    }
 
     return (
         <React.Fragment>
@@ -77,12 +89,12 @@ function HomeworkListItemTeacher({homework}) {
                 <div className="flex flex-col w-4/5">
                     <Typography
                         variant="h5">{homework.subject_title}: {moment(homework.lesson_date).format("dddd, DD MMMM")}</Typography>
-                    <Divider sx={{mb: 1}} />
+                    <Divider sx={{mb: 1}}/>
                     <Typography variant="body1">Тема: {homework.lesson_topic ? homework.lesson_topic : "-"}</Typography>
                 </div>
-                {/*<div>{HomeworkStatus(lesson.homework_status)}</div>*/}
                 <div>
-                    <Badge badgeContent={homework.under_review_count && homework.under_review_count} color="primary">
+                    <div></div>
+                    <Badge badgeContent={homework.under_review_count && homework.under_review_count} color='primary'>
                         <Button
                             onClick={handleClickOpen}
                             variant="contained"
@@ -92,49 +104,60 @@ function HomeworkListItemTeacher({homework}) {
                         </Button>
                     </Badge>
                 </div>
-                <div>
-
-                </div>
             </div>
-            {/*<BootstrapDialog*/}
-            {/*    onClose={handleClose}*/}
-            {/*    aria-labelledby="customized-dialog-title"*/}
-            {/*    open={open}*/}
-            {/*    fullWidth*/}
-            {/*>*/}
-            {/*    <div className="flex justify-between">*/}
-            {/*        <DialogTitle sx={{m: 0, p: 2}} id="customized-dialog-title">*/}
-            {/*            {getSubjectName(lesson.subject_id)}*/}
-            {/*        </DialogTitle>*/}
-            {/*        <IconButton*/}
-            {/*            aria-label="close"*/}
-            {/*            onClick={handleClose}*/}
-            {/*            sx={(theme) => ({*/}
-            {/*                color: theme.palette.grey[500],*/}
-            {/*            })}*/}
-            {/*        >*/}
-            {/*            <CloseIcon/>*/}
-            {/*        </IconButton>*/}
-            {/*    </div>*/}
-            {/*    <DialogContent dividers>*/}
-            {/*        <Typography gutterBottom>*/}
-            {/*            <b>Содержание ДЗ</b>*/}
-            {/*        </Typography>*/}
-            {/*        <Typography gutterBottom>*/}
-            {/*            {lesson.homework}*/}
-            {/*        </Typography>*/}
-            {/*    </DialogContent>*/}
-            {/*    {lesson.homework_status !== 3 && <DialogContent dividers>*/}
-            {/*        <Typography gutterBottom>*/}
-            {/*            <b>Загруженные ДЗ</b>*/}
-            {/*            <LoadedFilesListTeacher lesson={lesson} />*/}
-            {/*        </Typography>*/}
-            {/*    </DialogContent>}*/}
 
-            {/*    /!*<DialogActions>*!/*/}
-            {/*    /!*    <UploadHomeworkBtn lesson={item} />*!/*/}
-            {/*    /!*</DialogActions>*!/*/}
-            {/*</BootstrapDialog>*/}
+            <Dialog
+                onClose={handleClose}
+                aria-labelledby="customized-dialog-title"
+                open={open}
+                fullWidth
+            >
+                <div className="flex justify-between items-center">
+                    <DialogTitle sx={{m: 0, p: 2}} id="customized-dialog-title">
+                        {homework.subject_title}
+                    </DialogTitle>
+                        <IconButton
+                            aria-label="close"
+                            onClick={handleClose}
+                            sx={(theme) => ({
+                                color: theme.palette.grey[500],
+                                mr: 1,
+                            })}
+                        >
+                            <CloseIcon/>
+                        </IconButton>
+                </div>
+                <DialogContent dividers>
+                    <Typography gutterBottom>
+                        <b>Содержание</b>
+                    </Typography>
+                    <Typography gutterBottom>
+                        {homework.description}
+                    </Typography>
+                    {teacherFiles && teacherFiles.map((file) => {
+                        return (
+                            <div
+                                className="flex justify-between items-center border-stone-300 border-2 px-3 py-2 rounded mb-3 last:mb-0">
+                                <div className="text-balance">
+                                    <Typography variant='subtitle2'><AttachFileRoundedIcon
+                                        fontSize='small'/> {file.file_name}</Typography>
+                                </div>
+                                <div className="flex items-center">
+                                    <div>
+                                        <IconButton onClick={() => handleDownLoadTeacherFile(file.id)}><DownloadRoundedIcon/></IconButton>
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                    })}
+                </DialogContent>
+                <DialogContent dividers>
+                    <Typography gutterBottom>
+                        <b>Загруженные ДЗ</b>
+                        <SolutionListTeacher homework={homework}/>
+                    </Typography>
+                </DialogContent>
+            </Dialog>
         </React.Fragment>
     );
 }

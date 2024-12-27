@@ -13,11 +13,11 @@ import HomeworkListItemTeacher from "@/components/homework/teacher/HomeworkListI
 const HomeworkListTeacher = () => {
     const {data, error, isPending, refetch} = useQuery({
         queryKey: ['homework'],
-        queryFn: () => getLessonsWithHomeWork(),
+        queryFn: () => fetchHomeworks(),
     })
 
     // @ts-ignore
-    const getLessonsWithHomeWork = async () => {
+    const fetchHomeworks = async () => {
         const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/homework/teacher`, {
             method: "GET",
             credentials: "include",
@@ -43,8 +43,6 @@ const HomeworkListTeacher = () => {
     if (error) {
         return <div>Не удалось загрузить домашние задания</div>
     }
-
-    console.log(data)
 
     return (
         <div className="flex flex-col h-full">

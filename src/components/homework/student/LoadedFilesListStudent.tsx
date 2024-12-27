@@ -1,26 +1,14 @@
 import {useQuery, useQueryClient} from "@tanstack/react-query";
-import {Button} from "@mui/material";
+import {Button, Typography} from "@mui/material";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import React from "react";
+import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
+import AttachFileRoundedIcon from "@mui/icons-material/AttachFileRounded";
 
 // @ts-ignore
-function LoadedFilesListStudent({homeworkID}) {
+function LoadedFilesListStudent({files, homeworkID}) {
     const queryClient = useQueryClient();
-
-    const {data, error, isPending, refetch} = useQuery({
-        queryKey: ['homework-files', homeworkID],
-        queryFn: () => getHomeworkFiles(homeworkID),
-        staleTime: 1000
-    })
-
-    // @ts-ignore
-    const getHomeworkFiles = async (homeworkID) => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/homework/files/${homeworkID}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
-        return response.json()
-    }
 
     // @ts-ignore
     const handleDownLoadFile = (id) => {
@@ -65,43 +53,27 @@ function LoadedFilesListStudent({homeworkID}) {
             method: "DELETE"
         });
         if (response.status == 200) {
-
-            // @ts-ignore
-            await queryClient.invalidateQueries(['homework-files', homeworkID]);
+            await queryClient.invalidateQueries({queryKey: ['solution', homeworkID]});
         }
     }
 
-    if (isPending) {
-        return <div>Загрузка</div>
+    if (!files) {
+        return null
     }
 
     return (
         <div>
-            {data.length ? (
+            {files.length ? (
                 // @ts-ignore
-                data.map((el) => (
+                files.map((file) => (
                     <div
-                        key={el.id}
-                        className="p-2 mt-2 border-2 rounded flex justify-between items-center"
-                    >
-                        Файл {el.id}
+                        key={file.id}
+                        className="p-2 mt-2 border-2 rounded flex justify-between items-center">
+
+                        <Typography variant='subtitle2'><AttachFileRoundedIcon fontSize='small'/> {file.file_name}</Typography>
                         <div>
-                            <Button
-                                sx={{ bgcolor: "#702DFF", marginRight: "10px" }}
-                                size="small"
-                                variant="contained"
-                                onClick={() => handleDownLoadFile(el.id)}
-                            >
-                                Скачать
-                            </Button>
-                            <Button
-                                sx={{ bgcolor: "#ff2d5e" }}
-                                size="small"
-                                variant="contained"
-                                onClick={() => handleDeleteFile(el.id)}
-                            >
-                                Удалить
-                            </Button>
+                            <IconButton onClick={() => handleDownLoadFile(file.id)}><DownloadRoundedIcon/></IconButton>
+                            <IconButton onClick={() => handleDeleteFile(file.id)}><DeleteIcon/></IconButton>
                         </div>
                     </div>
                 ))

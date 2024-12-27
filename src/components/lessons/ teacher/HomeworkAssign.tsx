@@ -19,18 +19,19 @@ import Slide from "@mui/material/Slide";
 import Alert from "@mui/material/Alert";
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import Snackbar from "@mui/material/Snackbar";
+import { VisuallyHiddenInput } from '@/components/ui/VisuallyHiddenInput';
 
-const VisuallyHiddenInput = styled('input')({
-    clip: 'rect(0 0 0 0)',
-    clipPath: 'inset(50%)',
-    height: 1,
-    overflow: 'hidden',
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    whiteSpace: 'nowrap',
-    width: 1,
-});
+// const VisuallyHiddenInput = styled('input')({
+//     clip: 'rect(0 0 0 0)',
+//     clipPath: 'inset(50%)',
+//     height: 1,
+//     overflow: 'hidden',
+//     position: 'absolute',
+//     bottom: 0,
+//     left: 0,
+//     whiteSpace: 'nowrap',
+//     width: 1,
+// });
 
 type FileState = File[];
 
@@ -72,7 +73,7 @@ function HomeworkAssign({event}) {
         setFiles([])
     };
 
-    const uploadHomework = async () => {
+    const assignHomework = async () => {
         setIsLoading(true)
         const formData = new FormData()
         files.forEach((file) => formData.append('files', file));
@@ -182,7 +183,7 @@ function HomeworkAssign({event}) {
                 <DialogActions sx={{padding: 2}}>
                     <ColorLoadingButton
                         loading={isLoading}
-                        onClick={uploadHomework}
+                        onClick={assignHomework}
                         disabled={description.length === 0}
                         variant="contained">Отправить</ColorLoadingButton>
                 </DialogActions>
