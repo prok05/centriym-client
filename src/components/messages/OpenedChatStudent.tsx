@@ -40,7 +40,10 @@ export function OpenedChatStudent({selectedChat, setSelectedChat, user}) {
     })
 
     useEffect(() => {
-        if (!data || !selectedChat?.id) return;
+        // если нет сообщений или выбранного чата, не подключаемся к вебсокет
+        if (!data || !selectedChat?.id) {
+            return
+        }
 
         socketRef.current = new WebSocket(`${process.env.NEXT_PUBLIC_BACKEND_URL}/ws?chat_id=${selectedChat.id}`);
 
@@ -81,51 +84,57 @@ export function OpenedChatStudent({selectedChat, setSelectedChat, user}) {
         scrollToBottom();
     }, [messages]);
 
-    // @ts-ignore
-    const sendMessage = (id, messageContent: string) => {
+    const sendMessage = async (id: string, messageContent: string) => {
         const trimmedMessage = messageContent.trim();
         if (!trimmedMessage || !selectedChat?.id || !user?.user?.id) {
             console.error("Invalid message or missing chat/user data");
             return;
         }
-        if (socketRef.current?.readyState === WebSocket.OPEN) {
-            const messagePayload = {
-                type: "NEW_MESSAGE",
-                user_id: id,
-                message: {
-                    chat_id: selectedChat.id,
-                    sender_id: user.user.id,
-                    content: trimmedMessage,
-                    teacher_id: selectedChat.id,
-                },
-            };
 
-            socketRef.current.send(JSON.stringify(messagePayload));
-            setMessage("");
-        } else {
-            console.error("WebSocket connection is not open");
+        const messagePayload = {
+            type: "NEW_MESSAGE",
+            user_id: id,
+            message: {
+                chat_id: selectedChat.id,
+                sender_id: user.user.id,
+                content: trimmedMessage,
+                teacher_id: selectedChat.id,
+            },
+        };
+
+        try {
+            // Отправка через WebSocket
+            if (socketRef.current?.readyState === WebSocket.OPEN) {
+                socketRef.current.send(JSON.stringify(messagePayload));
+                console.log("Message sent via WebSocket:", messagePayload);
+            } else {
+                // Если WebSocket недоступен или это первое сообщение
+                const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/messages`, {
+                    method: "POST",
+                    credentials: "include",
+                    body: JSON.stringify({
+                        user_id: id,
+                        message: { content: trimmedMessage },
+                    }),
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                if (response.ok) {
+                    console.log("Message sent via API");
+                    await refetch(); // Обновляем список чатов/сообщений
+                    setFirstMessage(true); // Помечаем, что первый чат создан
+                } else {
+                    console.error("Failed to send message via API:", response.statusText);
+                }
+            }
+
+            setMessage(""); // Очистка поля ввода
+        } catch (error) {
+            console.error("Error sending message:", error);
         }
     };
-
-    // @ts-ignore
-    const sendMessageFirst = async (id, message) => {
-        const body = {
-            "user_id": id,
-            "message": {
-                "content": message
-            }
-        }
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/messages`, {
-            method: "POST",
-            credentials: "include",
-            body: JSON.stringify(body)
-        });
-        if (response.status == 201) {
-            setMessage('')
-            await refetch()
-            setFirstMessage(true)
-        }
-    }
 
     return (
         <div className="flex flex-col h-full relative">
@@ -139,7 +148,7 @@ export function OpenedChatStudent({selectedChat, setSelectedChat, user}) {
             </div>
             <div className="bg-gray-50 h-full flex flex-col items-center overflow-y-scroll">
                 {messages.length === 0 && <EmptyMessages/>}
-                {messages.length > 0 && <MessageList user={user} messages={messages}/>}
+                {messages.length > 0 && <MessageList senderName={selectedChat.first_name} user={user} messages={messages}/>}
                 <div ref={messagesEndRef}/>
             </div>
             <div className="flex justify-center items-center bg-gray-50 pb-3 relative">
@@ -181,13 +190,7 @@ export function OpenedChatStudent({selectedChat, setSelectedChat, user}) {
                         color="primary"
                         aria-label="add"
                         focusRipple={true}
-                        onClick={() => {
-                            if (data) {
-                                sendMessage(selectedChat.id, message)
-                            } else {
-                                sendMessageFirst(selectedChat.id, message)
-                            }
-                        }}
+                        onClick={() => sendMessage(selectedChat.id, message)}
                         sx={{
                             bgcolor: "#702DFF",
                         }

@@ -61,7 +61,6 @@ export function useUser(): UseUserResult {
                 }
 
                 const userData = await response.json();
-                console.log("userdata:", userData)
                 setUser(userData);
             } catch (err: any) {
                 setError(err.message);

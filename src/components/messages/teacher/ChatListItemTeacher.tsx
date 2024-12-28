@@ -2,11 +2,6 @@ import {Avatar, Skeleton} from "@mui/material";
 
 // @ts-ignore
 export default function ChatListItemTeacher({chat, setSelectedChat, user}) {
-    function onClick() {
-        setSelectedChat(chat)
-    }
-
-
     // @ts-ignore
     const showChatSender = (participants, min) => {
         // @ts-ignore
@@ -20,7 +15,7 @@ export default function ChatListItemTeacher({chat, setSelectedChat, user}) {
 
     return (
         <div className="flex px-4 py-4 hover:bg-purple-pale transition-colors cursor-pointer"
-             onClick={onClick}
+             onClick={() => setSelectedChat(chat)}
         >
             <div className="mr-5">
                 <Avatar className="mb-2" sx={{bgcolor: '#702dff', width: 56, height: 56}}>

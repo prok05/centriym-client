@@ -74,4 +74,14 @@ export const getSubjectName = (id: number) => {
     }
 }
 
+export const showChatSender = (participants: any, user:any, min: boolean) => {
+    // @ts-ignore
+    const participant = participants.find((p) => p.user_id !== user.user.id);
+    if (min) {
+        return `${participant.first_name[0]}${participant.last_name[0]}`
+    } else {
+        return `${participant.first_name} ${participant.last_name}`
+    }
+}
+
 export default formatDate;

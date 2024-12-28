@@ -5,6 +5,7 @@ import {useMutation, useQuery} from "@tanstack/react-query";
 import EmptyMessages from "@/components/messages/EmptyMessages";
 import {useEffect, useRef, useState} from "react";
 import MessageList from "@/components/messages/MessageList";
+import {showChatSender} from "@/utils/utils";
 
 // @ts-ignore
 export function OpenedChatTeacher({selectedChat, setSelectedChat, user}) {
@@ -103,11 +104,13 @@ export function OpenedChatTeacher({selectedChat, setSelectedChat, user}) {
         }
     };
 
+    const senderName = showChatSender(selectedChat.participants, user, false)
+
     return (
         <div className="flex flex-col h-full relative">
             <div className="py-3 px-6 flex justify-between items-center border-b-2">
                 <Typography variant="subtitle1">
-                    {selectedChat.first_name} {selectedChat.last_name}
+                    {senderName}
                 </Typography>
                 <IconButton onClick={closeChat} aria-label="delete">
                     <CloseIcon/>
@@ -115,7 +118,7 @@ export function OpenedChatTeacher({selectedChat, setSelectedChat, user}) {
             </div>
             <div className="bg-gray-50 h-full flex flex-col items-center overflow-y-scroll">
                 {messages.length === 0 && <EmptyMessages/>}
-                {messages.length > 0 && <MessageList user={user} messages={messages}/>}
+                {messages.length > 0 && <MessageList senderName={senderName} user={user} messages={messages}/>}
                 <div ref={messagesEndRef}/>
             </div>
             <div className="flex justify-center items-center bg-gray-50 pb-3 relative">

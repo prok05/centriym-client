@@ -4,7 +4,7 @@ export function NoChat() {
 
     return (
         <div className="flex justify-center items-center h-full">
-            <h1>Выберите или создайте чат</h1>
+            <h1>Выберите чат</h1>
         </div>
     )
 }
