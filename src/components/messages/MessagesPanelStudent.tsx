@@ -7,8 +7,8 @@ import {useEffect, useRef, useState} from "react";
 // @ts-ignore
 export function MessagesPanelStudent({user}) {
     const [selectedChat, setSelectedChat] = useState(null);
-    const [selectedUser, setSelectedUser] = useState(null)
-    const chatSocket = useRef<WebSocket | null>()
+    const [selectedUser, setSelectedUser] = useState(null);
+    const chatSocket = useRef<WebSocket | null>();
     const [ws, setWs] = useState(null);
 
     useEffect(() => {

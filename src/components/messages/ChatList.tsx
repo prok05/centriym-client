@@ -7,19 +7,6 @@ interface Props {
     data: FetchChatI
 }
 
-async function fetchChats() {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/chats`, {
-        method: "GET",
-        credentials: "include"
-    })
-
-    if (!res.ok) {
-        throw new Error('Failed to fetch posts')
-    }
-
-    return res.json()
-}
-
 // @ts-ignore
 export default function ChatList({setSelectedChat}) {
     const getTeachers = async () => {

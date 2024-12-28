@@ -39,16 +39,6 @@ export function OpenedChatStudent({selectedChat, setSelectedChat, user}) {
         staleTime: 5_000
     })
 
-    // @ts-ignore
-    // const getChats = async () => {
-    //     const response = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/chats/get/${selectedChat.id}`, {
-    //         method: "GET",
-    //         credentials: "include"
-    //     });
-    //
-    //     return await response.json();
-    // };
-
     useEffect(() => {
         if (!data || !selectedChat?.id) return;
 
@@ -192,7 +182,6 @@ export function OpenedChatStudent({selectedChat, setSelectedChat, user}) {
                         aria-label="add"
                         focusRipple={true}
                         onClick={() => {
-                            console.log(data)
                             if (data) {
                                 sendMessage(selectedChat.id, message)
                             } else {
