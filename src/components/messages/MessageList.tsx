@@ -1,6 +1,6 @@
-// @ts-ignore
 import {showChatSender} from "@/utils/utils";
 
+// @ts-ignore
 const Message = ({ isFirstInGroup, isCurrentUser, message, senderName }) => {
     return (
         <div className={`flex flex-col ${isCurrentUser ? "self-end" : "self-start"} mb-3`}>
@@ -32,6 +32,7 @@ const MessageList = ({ user, messages, senderName }) => {
     // @ts-ignore
     return (
         <div className="flex flex-col py-6 w-4/5">
+            {/*@ts-ignore*/}
             {messages.map((message, index) => {
                 const isFirstInGroup = isStartOfGroup(message, messages[index - 1]);
                 const isCurrentUser = message.sender_id === user.user.id;

@@ -24,7 +24,7 @@ import { VisuallyHiddenInput } from '@/components/ui/VisuallyHiddenInput';
 type FileState = File[];
 
 // @ts-ignore
-function HomeworkAssign({event}) {
+function HomeworkAssign({event, homeworkInfo}) {
     const [description, setDescription] = useState<string>('')
     const [open, setOpen] = React.useState(false);
     const [assignSuccess, setAssignSuccess] = React.useState(false);
@@ -94,7 +94,7 @@ function HomeworkAssign({event}) {
 
     return (
         <React.Fragment>
-            <ColorButton variant="contained" onClick={handleClickOpen}>Задать ДЗ</ColorButton>
+            <ColorButton disabled={homeworkInfo} variant="contained" onClick={handleClickOpen}>Задать ДЗ</ColorButton>
             <Dialog
                 onClose={handleClose}
                 aria-labelledby="assign-homework-dialog"

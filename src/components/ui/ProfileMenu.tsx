@@ -7,10 +7,12 @@ import Link from "next/link";
 import {Skeleton} from "@mui/material";
 import {useRouter} from 'next/navigation'
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
+import {useQueryClient} from "@tanstack/react-query";
 
 // @ts-ignore
 export function ProfileMenu({role, paid_lesson_count, isLoading}) {
     const router = useRouter()
+    const queryClient = useQueryClient();
 
     async function handleLogout() {
         try {
@@ -27,6 +29,7 @@ export function ProfileMenu({role, paid_lesson_count, isLoading}) {
                     return
                 case 200:
                     router.push("/login")
+                    queryClient.removeQueries()
                     break
             }
         } catch (error) {

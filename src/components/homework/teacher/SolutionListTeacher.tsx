@@ -107,10 +107,12 @@ function SolutionListTeacher({homework}) {
         return <div>Загрузка</div>
     }
 
+    console.log(data)
+
     return (
         <div className="mt-2">
             {/*@ts-ignore*/}
-            {data.map((solution) => (
+            {data.length > 0 ? data.map((solution) => (
                 <Accordion
                     key={solution.id}
                     expanded={expanded === solution.id}
@@ -172,7 +174,7 @@ function SolutionListTeacher({homework}) {
                         }
                     </AccordionDetails>
                 </Accordion>
-            ))}
+            )) : <div>Решений нет</div>}
         </div>
     );
 }

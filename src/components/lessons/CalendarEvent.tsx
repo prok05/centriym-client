@@ -199,7 +199,7 @@ export function CalendarEvent({event, view, user}) {
                     display: user.user.role === "teacher" ? "flex" : "block",
                     justifyContent: user.user.role === "teacher" ? "space-between" : "initial"
                 }}>
-                    {user.user.role === "teacher" && <HomeworkAssign event={event}/>}
+                    {user.user.role === "teacher" && <HomeworkAssign homeworkInfo={homeworkInfo} event={event}/>}
                     <EnterLessonBtn/>
                 </DialogActions>
             </Dialog>
